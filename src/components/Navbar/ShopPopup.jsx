@@ -1,36 +1,43 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { CloseIcon } from '../Icons/Icons';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { CloseIcon } from "../Icons/Icons";
 
 // Default categories (only used if no prop passed)
 const defaultCategories = [
   {
     id: 1,
-    title: 'Diapers',
-    image:'/images/m-baby-diaper-pants-12hrs-absorption-adl-medium-7-12kg-mega-original-imahhj6fddjwuxh8.jpg',
-    link: '/category/diapers',
-    color: 'from-sky-400 to-blue-500',
+    title: "Backflow Cones",
+    image: "/images/backflow-incense-cone-500x500-1-300x300.webp",
+    link: "/category/backflow-cones",
+    color: "from-sky-400 to-blue-500",
   },
   {
     id: 2,
-    title: 'Adult Diapers',
-    image: '/images/m-unisex-pull-up-pants-12hrs-absorption-waist-size-24-45inch-original-imahhhgs2wfdnbnb.jpg',
-    link: '/category/adult-diapers',
-    color: 'from-slate-500 to-slate-700',
+    title: "Chandan Tika",
+    image: "/images/oip-300x180.jpg",
+    link: "/category/chandan-tika",
+    color: "from-slate-500 to-slate-700",
   },
   {
     id: 3,
-    title: 'Wipes',
-    image: '/images/premium-baby-wipes-99-pure-water-aloe-vera-glycerine-with-lid-original-imahhj6nxypmgjhh.jpg',
-    link: '/category/wipes',
-    color: 'from-teal-400 to-teal-600',
+    title: "Corporate Gifting",
+    image: "/images/2147720593-300x300.jpg",
+    link: "/category/gifts",
+    color: "from-teal-400 to-teal-600",
   },
   {
     id: 4,
-    title: 'Sanitary Pads',
-    image: '/images/leak-proof-sanitary-pad-for-heavy-flow-with-disposable-bags-original-imahm4yxmygc5m6t (3).jpg',
-    link: '/category/sanitary-pads',
-    color: 'from-rose-400 to-pink-500',
+    title: "Dhoop Cones & Sticks",
+    image: "/images/incense-loban-dhoop-cone-1650616953-6302472-300x300.jpeg",
+    link: "/category/dhoop-cones-and-dhoop-stick",
+    color: "from-rose-400 to-pink-500",
+  },
+  {
+    id: 5,
+    title: "Havan Cups",
+    image: "/images/hc1-300x300.webp",
+    link: "/category/havan-cups",
+    color: "from-rose-400 to-pink-500",
   },
 ];
 
@@ -53,8 +60,8 @@ export default function ShopPopup({
   categories = null,
   loading = false,
 }) {
-
   const [imageErrors, setImageErrors] = useState({});
+  
 
   // Use provided categories or fallback to default
   const displayCategories = categories?.length ? categories : defaultCategories;
@@ -62,15 +69,15 @@ export default function ShopPopup({
   // Close on Escape key
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
     if (isOpen) {
-      window.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
+      window.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
     }
     return () => {
-      window.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = '';
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -86,9 +93,9 @@ export default function ShopPopup({
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
         onClick={() => {
-  onCategorySelect?.(cat);
-  onClose();
-}}
+          onCategorySelect?.(cat);
+          onClose();
+        }}
       />
 
       {/* Popup container */}
@@ -98,16 +105,16 @@ export default function ShopPopup({
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Shop by <span className="text-teal-600">Category</span>
           </h2>
-      <button
-  onMouseDown={(e) => e.stopPropagation()}
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onClose();
-  }}
-  className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400"
-  aria-label="Close"
->
+          <button
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400"
+            aria-label="Close"
+          >
             <CloseIcon className="w-5 h-5" />
           </button>
         </div>
@@ -124,9 +131,9 @@ export default function ShopPopup({
                   key={cat.id}
                   to={cat.link}
                   onClick={() => {
-  onCategorySelect?.(cat);
-  onClose();
-}}
+                    onCategorySelect?.(cat);
+                    onClose();
+                  }}
                   className="group relative flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1"
                 >
                   <div className="w-full aspect-square rounded-2xl overflow-hidden shadow-md ring-1 ring-black/5 group-hover:ring-2 group-hover:ring-teal-400 transition-all duration-300">
@@ -138,8 +145,12 @@ export default function ShopPopup({
                         onError={() => handleImageError(cat.id)}
                       />
                     ) : (
-                      <div className={`w-full h-full bg-gradient-to-br ${cat.color || 'from-gray-400 to-gray-600'} flex items-center justify-center`}>
-                        <span className="text-white text-lg font-bold">{cat.title.charAt(0)}</span>
+                      <div
+                        className={`w-full h-full bg-gradient-to-br ${cat.color || "from-gray-400 to-gray-600"} flex items-center justify-center`}
+                      >
+                        <span className="text-white text-lg font-bold">
+                          {cat.title.charAt(0)}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -149,7 +160,6 @@ export default function ShopPopup({
                 </Link>
               ))}
             </div>
-
           </>
         )}
       </div>

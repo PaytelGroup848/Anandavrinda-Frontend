@@ -5,73 +5,70 @@ import { ArrowRight, ChevronRight, Heart, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { categoryService } from "../../services/category";
 
-const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "https://qubanhygienecare.com";
-// "http://localhost:5000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const fallbackCategories = [
   {
     id: 1,
-    name: "Adult Care",
-    subtitle: "Comfort & dignity, always.",
+    name: "Backflow Cones",
+    subtitle: "Premium backflow incense cones.",
     description:
-      "Premium adult diapers, underpads, catheters and more designed for comfort and confidence.",
-    image: "/images/adult-pullup.jpg",
-    slug: "adult-care",
-    icon: "🛡️",
-    gradient: "from-slate-700 to-slate-950",
+      "Explore our range of premium backflow cones for a calming and aromatic experience.",
+    image: "/images/backflow-incense-cone-500x500-1-300x300.webp",
+    slug: "backflow-cones",
+    icon: "🪔",
+    gradient: "from-sky-400 to-blue-500",
     productCount: 0,
   },
   {
     id: 2,
-    name: "Baby Care",
-    subtitle: "Gentle as a mother's touch.",
+    name: "Chandan Tika",
+    subtitle: "Pure sandalwood elegance.",
     description:
-      "Ultra-soft diapers, wipes, lotions and washes that keep your little one happy and safe.",
-    image: "/images/baby-diaper.jpg",
-    slug: "baby-care",
-    icon: "👶",
-    gradient: "from-sky-500 to-blue-700",
+      "Traditional Chandan Tika products crafted for पूजा, rituals and everyday spiritual use.",
+    image: "/images/oip-300x180.jpg",
+    slug: "chandan-tika",
+    icon: "🕉️",
+    gradient: "from-slate-500 to-slate-700",
     productCount: 0,
   },
   {
     id: 3,
-    name: "Hygiene Essentials",
-    subtitle: "Cleanliness you can trust.",
+    name: "Corporate Gifting",
+    subtitle: "Thoughtful gifts for every occasion.",
     description:
-      "Hypoallergenic, alcohol-free wipes and hygiene essentials for delicate skin.",
-    image: "/images/wipes.jpg",
-    slug: "hygiene-essentials",
-    icon: "🧼",
-    gradient: "from-teal-500 to-emerald-700",
+      "Discover premium corporate gifting options perfect for clients, teams and special occasions.",
+    image: "/images/2147720593-300x300.jpg",
+    slug: "gifts",
+    icon: "🎁",
+    gradient: "from-teal-400 to-teal-600",
     productCount: 0,
   },
   {
     id: 4,
-    name: "Sanitary Pads",
-    subtitle: "Freedom to move.",
+    name: "Dhoop Cones & Sticks",
+    subtitle: "Pure fragrance for peaceful spaces.",
     description:
-      "Comfortable absorbent pads for reliable protection and everyday confidence.",
-    image: "/images/pads.png",
-    slug: "sanitary-pads",
-    icon: "🌸",
-    gradient: "from-rose-500 to-pink-700",
+      "Premium dhoop cones and incense sticks for a beautiful, long-lasting fragrance.",
+    image: "/images/incense-loban-dhoop-cone-1650616953-6302472-300x300.jpeg",
+    slug: "dhoop-cones-and-dhoop-stick",
+    icon: "🌿",
+    gradient: "from-rose-400 to-pink-500",
+    productCount: 0,
+  },
+  {
+    id: 5,
+    name: "Havan Cups",
+    subtitle: "Convenient traditional rituals.",
+    description:
+      "Ready-to-use Havan Cups made for a simple and convenient spiritual experience.",
+    image: "/images/hc1-300x300.webp",
+    slug: "havan-cups",
+    icon: "🔥",
+    gradient: "from-orange-400 to-red-500",
     productCount: 0,
   },
 ];
-
-const iconMap = {
-  "Adult Care": "🛡️",
-  "Baby Care": "👶",
-  "Hygiene Essentials": "🧼",
-  "Sanitary Pads": "🌸",
-  "Elderly Care": "👴",
-  "Skin Care": "🧴",
-  Wellness: "💚",
-  Mobility: "🛴",
-  Nutrition: "🥗",
-  "Medical Supplies": "🏥",
-};
 
 const gradientMap = {
   "Adult Care": "from-slate-700 to-slate-950",
@@ -122,6 +119,7 @@ export default function Categories({
   subtitle = "Products that care for every generation",
   limit = 4,
   showAllButton = true,
+  variant = "default",
 }) {
   const navigate = useNavigate();
   const sectionRef = useRef(null);
@@ -176,7 +174,7 @@ export default function Categories({
             id: cat._id || cat.id || slug,
             name,
             slug,
-            icon: iconMap[name] || cat.icon || "📦",
+
             gradient:
               gradientMap[name] ||
               cat.gradient ||
@@ -256,6 +254,71 @@ export default function Categories({
   }
 
   if (!visibleCategories.length) return null;
+
+  if (variant === "compact") {
+    return (
+      <section className="bg-white py-8 sm:py-10">
+        <div className="mx-auto max-w-[1400px] px-0 sm:px-4 lg:px-6">
+          {/* Header */}
+          <div className="mb-5 px-4 text-center sm:mb-7">
+            <h2 className="text-2xl font-black tracking-tight text-green-700 sm:text-3xl">
+              {title}
+            </h2>
+
+            <p className="mt-1 text-sm font-semibold text-orange-600 sm:text-base">
+              {subtitle}
+            </p>
+          </div>
+
+          {/* Category Grid */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-5">
+            {visibleCategories.map((category) => (
+              <Link
+                key={category._id || category.id}
+                to={category.link}
+                className="group relative block overflow-hidden rounded-xl bg-gray-100"
+              >
+                {/* Image */}
+                <div className="relative aspect-[1.25/1] overflow-hidden">
+                  {category.image ? (
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${category.gradient}`}
+                    >
+                      <span className="text-5xl">{category.icon}</span>
+                    </div>
+                  )}
+
+                  {/* Bottom overlay */}
+                  <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-white/95 px-3 py-2.5 text-center shadow-lg backdrop-blur-sm transition-all duration-300 group-hover:bg-white">
+                    <h3 className="text-xs font-black uppercase tracking-wide text-slate-900 sm:text-sm">
+                      {category.name}
+                    </h3>
+
+                    {category.productCount > 0 && (
+                      <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-500 sm:text-xs">
+                        {category.productCount}{" "}
+                        {category.productCount === 1 ? "Product" : "Products"}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

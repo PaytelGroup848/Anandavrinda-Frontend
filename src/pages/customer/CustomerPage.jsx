@@ -1,18 +1,25 @@
-import { lazy, Suspense, useCallback, memo, useEffect, useState } from 'react';
-import Hero from './Hero';
-import NewsLetter from './NewsLetter';
-import Features from './Features';
-import { useCart } from '../../context/CartContext';
-import toast from 'react-hot-toast';
-import { productService } from '../../services/product';
-import { useNavigate } from 'react-router-dom';
-import { wishlistService } from '../../services/wishlist';
-import { useAuth } from '../../context/AuthContext';
+import { lazy, Suspense, useCallback, memo, useEffect, useState } from "react";
+import Hero from "./Hero";
+import NewsLetter from "./NewsLetter";
+import Features from "./Features";
+import { useCart } from "../../context/CartContext";
+import toast from "react-hot-toast";
+import { productService } from "../../services/product";
+import { useNavigate } from "react-router-dom";
+import { wishlistService } from "../../services/wishlist";
+import { useAuth } from "../../context/AuthContext";
+import ShopPopup from "../../components/Navbar/ShopPopup";
+import categoryService from "../../services/category";
+import Categories from "./Categories";
 
-const FeaturedProducts = lazy(() => import('./FeaturedProucts/FeaturedProducts'));
+const FeaturedProducts = lazy(
+  () => import("./FeaturedProucts/FeaturedProducts"),
+);
 
-const SectionSkeleton = ({ height = 'h-[360px]' }) => (
-  <div className={`w-full ${height} animate-pulse rounded-[2rem] bg-gradient-to-br from-gray-100 via-teal-50 to-gray-100`} />
+const SectionSkeleton = ({ height = "h-[360px]" }) => (
+  <div
+    className={`w-full ${height} animate-pulse rounded-[2rem] bg-gradient-to-br from-gray-100 via-teal-50 to-gray-100`}
+  />
 );
 
 const CustomerPage = memo(() => {
@@ -36,10 +43,11 @@ const CustomerPage = memo(() => {
         const payload = response?.data || response || {};
         const nextProducts = payload?.products || payload?.data?.products || [];
 
-        if (mounted) setProducts(Array.isArray(nextProducts) ? nextProducts : []);
+        if (mounted)
+          setProducts(Array.isArray(nextProducts) ? nextProducts : []);
       } catch (err) {
-        console.error('Error fetching products:', err);
-        if (mounted) setError('Failed to load products');
+        console.error("Error fetching products:", err);
+        if (mounted) setError("Failed to load products");
       } finally {
         if (mounted) setLoading(false);
       }
@@ -53,130 +61,142 @@ const CustomerPage = memo(() => {
   }, []);
 
   const requireLogin = useCallback(
-    (from = '/') => {
+    (from = "/") => {
       if (isLoggedIn) return true;
 
-      navigate('/login', { state: { from } });
-      toast.error('Please login first');
+      navigate("/login", { state: { from } });
+      toast.error("Please login first");
       return false;
     },
-    [isLoggedIn, navigate]
+    [isLoggedIn, navigate],
   );
 
   const handleAddToCart = useCallback(
     async (productId) => {
-      if (!requireLogin('/')) return;
+      if (!requireLogin("/")) return;
 
       try {
         await addToCart({ id: productId }, 1);
-        window.dispatchEvent(new Event('cart-changed'));
-        toast.success('Added to cart!');
+        window.dispatchEvent(new Event("cart-changed"));
+        toast.success("Added to cart!");
       } catch (cartError) {
-        const message = cartError?.response?.data?.message || 'Failed to add to cart';
+        const message =
+          cartError?.response?.data?.message || "Failed to add to cart";
         toast.error(message);
       }
     },
-    [addToCart, requireLogin]
+    [addToCart, requireLogin],
   );
 
   const handleBuyNow = useCallback(
     async (productId) => {
-      if (!requireLogin('/checkout')) return;
+      if (!requireLogin("/checkout")) return;
 
       try {
         await addToCart({ id: productId }, 1);
-        window.dispatchEvent(new Event('cart-changed'));
-        navigate('/checkout');
+        window.dispatchEvent(new Event("cart-changed"));
+        navigate("/checkout");
       } catch (cartError) {
-        const message = cartError?.response?.data?.message || 'Unable to start checkout';
+        const message =
+          cartError?.response?.data?.message || "Unable to start checkout";
         toast.error(message);
       }
     },
-    [addToCart, navigate, requireLogin]
+    [addToCart, navigate, requireLogin],
   );
 
   const handleWishlistToggle = useCallback(
     async (productId, isCurrentlyWishlisted = false) => {
-      if (!requireLogin('/')) {
+      if (!requireLogin("/")) {
         return { success: false };
       }
 
       try {
         if (isCurrentlyWishlisted) {
           await wishlistService.removeFromWishlist(productId);
-          window.dispatchEvent(new Event('wishlist-changed'));
-          toast.success('Removed from wishlist');
+          window.dispatchEvent(new Event("wishlist-changed"));
+          toast.success("Removed from wishlist");
           return { success: true, isWishlisted: false };
         }
 
         await wishlistService.addToWishlist(productId);
-        window.dispatchEvent(new Event('wishlist-changed'));
-        toast.success('Added to wishlist');
+        window.dispatchEvent(new Event("wishlist-changed"));
+        toast.success("Added to wishlist");
         return { success: true, isWishlisted: true };
       } catch (wishlistError) {
-        const message = wishlistError?.response?.data?.message || 'Wishlist update failed';
+        const message =
+          wishlistError?.response?.data?.message || "Wishlist update failed";
         toast.error(message);
         return { success: false };
       }
     },
-    [requireLogin]
+    [requireLogin],
   );
 
   const hasError = error && products.length === 0;
 
   return (
-    <main className="min-h-screen overflow-hidden bg-white">
-      <Hero />
+    <div>
+      <main className="min-h-screen overflow-hidden bg-white">
+        <Hero />
 
+        <Categories
+          title="Shop by Category"
+          subtitle="Explore our premium range of divine charcoal-free fragrances"
+          limit={8}
+          showAllButton={false}
+          variant="compact"
+        />
 
-      <section className="relative bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <span className="inline-flex rounded-full bg-teal-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-teal-700 ring-1 ring-teal-100">
-                Best picks
-              </span>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
-                Featured Products
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">
-                Explore reliable healthcare products selected for comfort, quality and everyday care.
-              </p>
+        <section className="relative bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+              <div>
+                <span className="inline-flex rounded-full bg-teal-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-teal-700 ring-1 ring-teal-100">
+                  Best picks
+                </span>
+                <h2 className="mt-4 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
+                  Featured Products
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">
+                  Explore reliable healthcare products selected for comfort,
+                  quality and everyday care.
+                </p>
+              </div>
             </div>
+
+            {hasError ? (
+              <div className="rounded-[2rem] border border-red-100 bg-red-50 p-10 text-center">
+                <p className="font-black text-red-600">{error}</p>
+                <button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  className="mt-5 rounded-full bg-teal-600 px-5 py-3 text-sm font-black text-white hover:bg-teal-700"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : (
+              <Suspense fallback={<SectionSkeleton height="h-[420px]" />}>
+                <FeaturedProducts
+                  products={products}
+                  loading={loading}
+                  error={error}
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                  onWishlistToggle={handleWishlistToggle}
+                />
+              </Suspense>
+            )}
           </div>
-
-          {hasError ? (
-            <div className="rounded-[2rem] border border-red-100 bg-red-50 p-10 text-center">
-              <p className="font-black text-red-600">{error}</p>
-              <button
-                type="button"
-                onClick={() => window.location.reload()}
-                className="mt-5 rounded-full bg-teal-600 px-5 py-3 text-sm font-black text-white hover:bg-teal-700"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : (
-            <Suspense fallback={<SectionSkeleton height="h-[420px]" />}>
-              <FeaturedProducts
-                products={products}
-                loading={loading}
-                error={error}
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
-                onWishlistToggle={handleWishlistToggle}
-              />
-            </Suspense>
-          )}
-        </div>
-      </section>
-
-      <Features />
-      <NewsLetter />
-    </main>
+        </section>
+        <Features />
+        {/* <NewsLetter /> */}
+      </main>
+    </div>
   );
 });
 
-CustomerPage.displayName = 'CustomerPage';
+CustomerPage.displayName = "CustomerPage";
 
 export default CustomerPage;

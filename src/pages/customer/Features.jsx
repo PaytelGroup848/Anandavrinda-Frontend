@@ -1,42 +1,55 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Headphones, LockKeyhole, Medal, PackageCheck, RotateCcw, Truck } from 'lucide-react';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import {
+  Headphones,
+  LockKeyhole,
+  Medal,
+  PackageCheck,
+  RotateCcw,
+  Truck,
+} from "lucide-react";
 
 const defaultFeaturesList = [
   {
     id: 1,
-    title: 'Free Shipping',
-    description: 'Orders above ₹999 shipped free with clear tracking and no hidden charges.',
+    title: "Free Shipping",
+    description:
+      "Orders above ₹599 shipped free with clear tracking and no hidden charges.",
     icon: Truck,
   },
   {
     id: 2,
-    title: 'Easy Returns',
-    description: 'Simple return support for eligible products with a smooth help process.',
+    title: "Easy Returns",
+    description:
+      "Simple return support for eligible products with a smooth help process.",
     icon: RotateCcw,
   },
   {
     id: 3,
-    title: 'Secure Payments',
-    description: 'Protected checkout with trusted payment gateway and safe transactions.',
+    title: "Secure Payments",
+    description:
+      "Protected checkout with trusted payment gateway and safe transactions.",
     icon: LockKeyhole,
   },
   {
     id: 4,
-    title: '24/7 Support',
-    description: 'Raise support tickets anytime and get help from our care team.',
+    title: "24/7 Support",
+    description:
+      "Raise support tickets anytime and get help from our care team.",
     icon: Headphones,
   },
   {
     id: 5,
-    title: 'Medical-Grade Quality',
-    description: 'Products selected for comfort, hygiene and everyday healthcare needs.',
+    title: "Medical-Grade Quality",
+    description:
+      "Products selected for comfort, hygiene and everyday healthcare needs.",
     icon: Medal,
   },
   {
     id: 6,
-    title: 'Express Dispatch',
-    description: 'Fast dispatch for priority products with reliable delivery partners.',
+    title: "Express Dispatch",
+    description:
+      "Fast dispatch for priority products with reliable delivery partners.",
     icon: PackageCheck,
   },
 ];
@@ -51,25 +64,32 @@ const containerVariants = {
 
 const cardVariants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
 
 export default function Features({
   features = defaultFeaturesList,
-  title = 'Why QubanHC',
+  title = "Why Anandavrinda",
   subtitle = "We're not just a store — we're a commitment to your family's health, comfort and care.",
 }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.12 });
 
   const renderTitle = () =>
-    title.split(' ').map((word, index) =>
-      word === 'QubanHC' ? (
-        <span key={`${word}-${index}`} className="bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent">
-          {word}{' '}
+    title.split(" ").map((word, index) =>
+      word === "Anandavrinda" ? (
+        <span
+          key={`${word}-${index}`}
+          className="bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent"
+        >
+          {word}{" "}
         </span>
       ) : (
         <span key={`${word}-${index}`}>{word} </span>
-      )
+      ),
     );
 
   return (
@@ -103,7 +123,7 @@ export default function Features({
           ref={ref}
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
+          animate={inView ? "visible" : "hidden"}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
         >
           {features.map((feature) => {

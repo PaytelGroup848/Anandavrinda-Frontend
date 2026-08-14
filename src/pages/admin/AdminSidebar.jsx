@@ -48,14 +48,14 @@ export default function AdminSidebar({ isOpen, onClose }) {
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
     >
       <div className="flex h-full flex-col border-r border-gray-200 bg-white shadow-2xl shadow-gray-300/40">
         <div className="relative border-b border-gray-100 bg-white px-4 py-5">
           <div className="flex items-center gap-3">
             <img
-              src="/images/QubanHC.svg"
+              src="/images/anandavrinda.jpeg"
               alt="Admin Logo"
               className="h-12 w-12 object-contain"
             />
@@ -63,7 +63,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <div>
               <p className="text-sm font-bold text-gray-900">Admin Panel</p>
               <p className="text-xs text-gray-400">
-                {user?.role === 'super_admin' ? 'Super Admin' : 'Sub Admin'}
+                {user?.role === "super_admin" ? "Super Admin" : "Sub Admin"}
               </p>
             </div>
           </div>
@@ -78,9 +78,11 @@ export default function AdminSidebar({ isOpen, onClose }) {
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-          {menus.length === 0 && user?.role === 'sub_admin' ? (
+          {menus.length === 0 && user?.role === "sub_admin" ? (
             <div className="rounded-xl border border-gray-100 bg-gray-50 p-4 text-center">
-              <p className="font-semibold text-gray-700">No Permissions Assigned</p>
+              <p className="font-semibold text-gray-700">
+                No Permissions Assigned
+              </p>
               <p className="mt-1 text-xs text-gray-400">
                 Contact super admin to assign permissions.
               </p>
@@ -97,8 +99,8 @@ export default function AdminSidebar({ isOpen, onClose }) {
                 onClick={() => handleNavigate(item.path)}
                 className={`w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
                   active
-                    ? 'border-l-4 border-teal-600 bg-teal-50 text-teal-700'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? "border-l-4 border-teal-600 bg-teal-50 text-teal-700"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 }`}
               >
                 {item.label}
@@ -108,7 +110,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
         </nav>
 
         <div className="border-t border-gray-100 bg-gray-50 p-4 text-center text-xs text-gray-400">
-          <p>© {new Date().getFullYear()} QubanHC</p>
+          <p>© {new Date().getFullYear()} Anandavrinda</p>
           <button
             type="button"
             onClick={() => handleNavigate(getFirstAllowedAdminPath(user))}

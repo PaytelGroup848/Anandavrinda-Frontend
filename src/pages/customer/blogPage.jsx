@@ -1,344 +1,574 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import {
+  Flame,
+  Sparkles,
+  Gift,
+  Wind,
+  Leaf,
   Heart,
   ShieldCheck,
-  Sparkles,
-  Baby,
-  Users,
-  Droplets,
   CheckCircle2,
   ArrowRight,
-  Feather,
   Clock,
-} from 'lucide-react';
-import Navbar from '../../components/Navbar/Navbar';
+  Star,
+  Flower2,
+} from "lucide-react";
+import Navbar from "../../components/Navbar/Navbar";
 
-/* Load the same premium type pairing used across QubanHC surfaces */
-const FONT_LINK_ID = 'QubanHC.svg';
+const FONT_LINK_ID = "anandavrinda-blog-fonts";
 
 function useBlogFonts() {
   useEffect(() => {
     if (document.getElementById(FONT_LINK_ID)) return;
-    const link = document.createElement('link');
+
+    const link = document.createElement("link");
     link.id = FONT_LINK_ID;
-    link.rel = 'stylesheet';
+    link.rel = "stylesheet";
     link.href =
-      'https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap';
+      "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap";
+
     document.head.appendChild(link);
   }, []);
 }
 
-const PRODUCTS = [
+/* =========================================================
+   CATEGORY / PRODUCT CONTENT
+========================================================= */
+
+const CATEGORIES = [
   {
-    id: 'adult-diapers',
-    icon: Users,
-    tag: 'For Adults',
-    title: 'Adult Diapers',
-    sizes: 'S · M · L · XL · XXL',
+    id: "agarbatti",
+    icon: Wind,
+    tag: "Everyday Fragrance",
+    title: "Agarbatti",
     description:
-      'Engineered for all-day dryness and dignity. Extra-absorbent core, breathable outer layer, and a snug leak-guard fit — built for every body, every size.',
-    points: ['12-hour absorption', 'Odour-lock technology', 'Soft, rash-free lining'],
-    accent: '#0f9d70',
-    accentSoft: '#e6f7f0',
+      "Premium incense sticks crafted to fill your home with soothing fragrances and create a peaceful everyday atmosphere.",
+    image: "/images/agarbatti.jpg",
+    fallbackImage: "/images/backflow-incense-cone-500x500-1-300x300.webp",
+    points: [
+      "Long-lasting fragrance",
+      "Rich and soothing aromas",
+      "Perfect for everyday use",
+    ],
   },
   {
-    id: 'sanitary-pads',
-    icon: Droplets,
-    tag: 'For Her',
-    title: 'Sanitary Pads',
-    sizes: 'Regular · Large · XL · Overnight',
+    id: "dhoop",
+    icon: Flame,
+    tag: "Pure Fragrance",
+    title: "Dhoop Cones & Sticks",
     description:
-      'Ultra-thin yet ultra-absorbent. Designed with a cottony-soft top layer so comfort never competes with protection, day or night.',
-    points: ['Instant absorption channels', 'No-leak side wings', 'Breathable, rash-free wear'],
-    accent: '#059669',
-    accentSoft: '#e3f7ee',
+      "Traditional dhoop cones and sticks made for puja, meditation and creating a beautifully fragrant spiritual space.",
+    image: "/images/dhoop.jpg",
+    fallbackImage:
+      "/images/incense-loban-dhoop-cone-1650616953-6302472-300x300.jpeg",
+    points: [
+      "Deep traditional fragrance",
+      "Ideal for puja & meditation",
+      "Easy and convenient to use",
+    ],
   },
   {
-    id: 'baby-diapers',
-    icon: Baby,
-    tag: 'For Little Ones',
-    title: 'Baby Diapers',
-    sizes: 'New Born · S · M · L · XL',
-    description:
-      "Gentle on the softest skin, tough on leaks. Every size is fitted with a breathable weave so your little one stays dry, happy, and rash-free.",
-    points: ['Hypoallergenic lining', 'Wetness indicator', '360° stretchable waistband'],
-    accent: '#10b981',
-    accentSoft: '#e6faf1',
-  },
-  {
-    id: 'baby-wipes',
+    id: "fragrance",
     icon: Sparkles,
-    tag: 'Everyday Care',
-    title: 'Baby Wipes',
-    sizes: '20 · 40 · 80 sheets',
+    tag: "Premium Collection",
+    title: "Fragrances",
     description:
-      'Alcohol-free, fragrance-friendly, and dermatologically tested — made to clean gently without ever compromising on comfort.',
-    points: ['99% pure water base', 'pH-balanced formula', 'Thick, tear-resistant sheets'],
-    accent: '#34d399',
-    accentSoft: '#ecfdf5',
+      "Discover beautiful fragrances designed to transform everyday spaces into calm, refreshing and welcoming environments.",
+    image: "/images/fragrance.jpg",
+    fallbackImage: "/images/backflow-incense-cone-500x500-1-300x300.webp",
+    points: [
+      "Refreshing fragrance profiles",
+      "Perfect for home & gifting",
+      "Premium aromatic experience",
+    ],
+  },
+  {
+    id: "havan",
+    icon: Leaf,
+    tag: "Traditional Essentials",
+    title: "Havan Cups",
+    description:
+      "Convenient Havan essentials designed to make traditional rituals simple, meaningful and easy to perform.",
+    image: "/images/havan-cups.jpg",
+    fallbackImage: "/images/hc1-300x300.webp",
+    points: [
+      "Easy to use",
+      "Traditional ingredients",
+      "Perfect for puja & havan",
+    ],
+  },
+  {
+    id: "chandan",
+    icon: Flower2,
+    tag: "Spiritual Essentials",
+    title: "Chandan Tika",
+    description:
+      "Traditional Chandan Tika products made for puja, festive occasions and everyday spiritual rituals.",
+    image: "/images/chandan-tika.jpg",
+    fallbackImage: "/images/oip-300x180.jpg",
+    points: [
+      "Traditional sandalwood experience",
+      "Ideal for puja & festivals",
+      "Perfect for personal use",
+    ],
+  },
+  {
+    id: "gifting",
+    icon: Gift,
+    tag: "Special Occasions",
+    title: "Corporate Gifting",
+    description:
+      "Thoughtfully curated gifting options for clients, employees, business partners and festive celebrations.",
+    image: "/images/corporate-gifting.jpg",
+    fallbackImage: "/images/2147720593-300x300.jpg",
+    points: [
+      "Elegant gifting options",
+      "Perfect for festive occasions",
+      "Suitable for corporate events",
+    ],
   },
 ];
+
+/* =========================================================
+   FESTIVE COLLECTION
+========================================================= */
+
+const FESTIVE_ITEMS = [
+  {
+    title: "Rakhi Collection",
+    description:
+      "Celebrate the beautiful bond of love with thoughtfully designed Rakhi collections.",
+    image: "/images/rakhi.jpg",
+    icon: Star,
+  },
+  {
+    title: "Puja Essentials",
+    description:
+      "Everything you need to make your traditional rituals more meaningful.",
+    image: "/images/puja-essentials.jpg",
+    icon: Flower2,
+  },
+  {
+    title: "Festive Gifting",
+    description:
+      "Make every celebration memorable with elegant and meaningful gifts.",
+    image: "/images/festive-gifting.jpg",
+    icon: Gift,
+  },
+];
+
+/* =========================================================
+   VALUES
+========================================================= */
 
 const VALUES = [
   {
+    icon: Leaf,
+    title: "Tradition at heart",
+    text: "Our products are inspired by India's rich traditions of fragrance, पूजा and festive celebrations.",
+  },
+  {
     icon: ShieldCheck,
-    title: 'Care-first formulation',
-    text: 'Every product is dermatologically tested before it reaches you — because comfort should never be a compromise.',
+    title: "Quality you can trust",
+    text: "We focus on consistent quality so every fragrance and festive essential delivers a dependable experience.",
   },
   {
     icon: Heart,
-    title: 'Every size, every body',
-    text: 'From new-borns to seniors, QubanHC is built around the belief that comfort should fit everyone, not the other way around.',
-  },
-  {
-    icon: CheckCircle2,
-    title: 'Trusted quality',
-    text: 'Rigorously tested materials and consistent quality checks, so every pack feels as good as the last.',
+    title: "Made for meaningful moments",
+    text: "From daily पूजा to festivals and gifting, our products are created to become part of special moments.",
   },
 ];
 
+/* =========================================================
+   STATS
+========================================================= */
+
 const STATS = [
-  { icon: Users, value: '4', label: 'Products in the range' },
-  { icon: Feather, value: '0%', label: 'Compromise on comfort' },
-  { icon: Clock, value: '12 hrs', label: 'Long-lasting protection' },
+  {
+    icon: Sparkles,
+    value: "Premium",
+    label: "Fragrance collections",
+  },
+  {
+    icon: Flower2,
+    value: "Traditional",
+    label: "Indian essentials",
+  },
+  {
+    icon: Gift,
+    value: "Festive",
+    label: "Gifting collections",
+  },
 ];
+
+/* =========================================================
+   IMAGE COMPONENT
+========================================================= */
+
+function ProductImage({ src, fallback, alt, className = "" }) {
+  const handleError = (event) => {
+    if (fallback && event.currentTarget.src !== fallback) {
+      event.currentTarget.src = fallback;
+    } else {
+      event.currentTarget.style.display = "none";
+    }
+  };
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onError={handleError}
+      loading="lazy"
+      className={`h-full w-full object-cover ${className}`}
+    />
+  );
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
 
 export default function QubanHCBlogPage() {
   useBlogFonts();
 
   return (
     <div
-      className="min-h-screen bg-[#fbfcfd] text-[#0b1220]"
-      style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif" }}
+      className="min-h-screen bg-[#fffdf8] text-[#17130f]"
+      style={{
+        fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
+      }}
     >
-               <Navbar/>
-      {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-32 -top-32 h-[420px] w-[420px] rounded-full bg-emerald-100 opacity-60 blur-3xl" />
-        <div className="pointer-events-none absolute -left-32 top-52 h-80 w-80 rounded-full bg-slate-100 opacity-70 blur-3xl" />
+      <Navbar />
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <section className="relative overflow-hidden bg-[#fffaf0]">
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full bg-orange-200/40 blur-3xl" />
+
+        <div className="pointer-events-none absolute -left-40 top-40 h-[400px] w-[400px] rounded-full bg-amber-100/60 blur-3xl" />
+
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.35]"
+          className="pointer-events-none absolute inset-0 opacity-30"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0)',
-            backgroundSize: '28px 28px',
-            maskImage: 'linear-gradient(to bottom, black, transparent 70%)',
+              "radial-gradient(circle at 1px 1px, #d6b36a 1px, transparent 0)",
+            backgroundSize: "30px 30px",
+            maskImage: "linear-gradient(to bottom, black, transparent 80%)",
           }}
         />
 
-        <div className="relative mx-auto grid max-w-6xl gap-14 px-6 py-20 md:grid-cols-2 md:items-center md:py-28">
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-6 md:grid-cols-2 md:items-center md:py-24 lg:px-8">
+          {/* Left */}
+
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">
-              <Heart size={13} />
-              Comfort, for every stage of life
+            <div className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-orange-700">
+              <Sparkles size={14} />
+              Fragrance • Tradition • Celebration
             </div>
 
             <h1
-              className="mt-6 text-[38px] font-extrabold leading-[1.15] tracking-tight text-[#0b1220] md:text-[50px]"
-              style={{ fontFamily: "'Sora', sans-serif" }}
+              className="mt-6 text-[40px] font-extrabold leading-[1.08] tracking-tight text-[#21170e] sm:text-[48px] lg:text-[58px]"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+              }}
             >
-              Full comfort, in every size —{' '}
-              <span className="bg-gradient-to-r from-[#0f9d70] via-[#10b981] to-[#34d399] bg-clip-text text-transparent">
-                that's the QubanHC promise.
+              Bring home the
+              <span className="block bg-gradient-to-r from-orange-700 via-amber-600 to-yellow-600 bg-clip-text text-transparent">
+                fragrance of tradition.
               </span>
             </h1>
 
-            <p className="mt-6 max-w-lg text-[15px] leading-7 text-slate-500">
-              From a newborn's first diaper to everyday care for the ones we love
-              most — QubanHygiene builds every product around one idea: comfort
-              that fits every body, every age, every size.
+            <p className="mt-6 max-w-xl text-[15px] leading-7 text-stone-600 sm:text-base">
+              Discover premium agarbatti, dhoop, fragrances, Havan essentials,
+              Chandan Tika and festive gifting collections designed to bring
+              warmth, devotion and beautiful moments into everyday life.
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="#products"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0b1220] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#182444]"
+                href="#collections"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25170d] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#3a2415]"
               >
-                See our products
+                Explore Collections
                 <ArrowRight size={16} />
               </a>
+
               <a
                 href="#story"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-[#0b1220] transition hover:border-slate-300"
+                className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white px-6 py-3.5 text-sm font-bold text-[#25170d] transition hover:border-orange-300"
               >
-                Our story
+                Our Story
               </a>
             </div>
 
-            <div className="mt-12 grid grid-cols-3 gap-6 border-t border-slate-100 pt-8">
-              {STATS.map((s) => (
-                <div key={s.label}>
-                  <div className="flex items-center gap-1.5 text-emerald-600">
-                    <s.icon size={15} />
+            {/* Stats */}
+
+            <div className="mt-12 grid grid-cols-3 gap-5 border-t border-orange-100 pt-8">
+              {STATS.map((stat) => (
+                <div key={stat.label}>
+                  <div className="flex items-center gap-1.5 text-orange-600">
+                    <stat.icon size={16} />
                   </div>
+
                   <p
-                    className="mt-2 text-[22px] font-extrabold tracking-tight text-[#0b1220]"
-                    style={{ fontFamily: "'Sora', sans-serif" }}
+                    className="mt-2 text-lg font-extrabold tracking-tight text-[#25170d] sm:text-xl"
+                    style={{
+                      fontFamily: "'Playfair Display', serif",
+                    }}
                   >
-                    {s.value}
+                    {stat.value}
                   </p>
-                  <p className="mt-0.5 text-[11.5px] leading-4 text-slate-400">
-                    {s.label}
+
+                  <p className="mt-1 text-[10px] leading-4 text-stone-500 sm:text-xs">
+                    {stat.label}
                   </p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Visual collage — swap the icon tiles for real product photos anytime */}
-          <div className="relative mx-auto grid w-full max-w-sm grid-cols-2 gap-4">
-            {PRODUCTS.map((p, i) => (
-              <div
-                key={p.id}
-                className={`flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl border border-slate-100 shadow-sm ${
-                  i % 2 === 1 ? 'translate-y-6' : ''
-                }`}
-                style={{ backgroundColor: p.accentSoft }}
-              >
+          {/* Right Image Collage */}
+
+          <div className="relative mx-auto w-full max-w-xl">
+            <div className="grid grid-cols-2 gap-4">
+              {CATEGORIES.slice(0, 4).map((item, index) => (
                 <div
-                  className="grid h-12 w-12 place-items-center rounded-2xl text-white shadow-md"
-                  style={{ backgroundColor: p.accent }}
+                  key={item.id}
+                  className={`relative overflow-hidden rounded-[28px] shadow-lg ${
+                    index % 2 === 1 ? "translate-y-7" : ""
+                  }`}
                 >
-                  <p.icon size={22} />
+                  <div className="aspect-square">
+                    <ProductImage
+                      src={item.image}
+                      fallback={item.fallbackImage}
+                      alt={item.title}
+                      className="transition duration-700 hover:scale-110"
+                    />
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 pt-12">
+                    <p className="text-sm font-bold text-white">{item.title}</p>
+                  </div>
                 </div>
-                <span className="text-[12px] font-bold text-[#0b1220]">{p.title}</span>
+              ))}
+            </div>
+
+            {/* Floating badge */}
+
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-2xl border border-orange-100 bg-white px-5 py-3 shadow-xl">
+              <div className="flex items-center gap-2">
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-100 text-orange-700">
+                  <Flame size={17} />
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
+                    Crafted for
+                  </p>
+
+                  <p className="text-sm font-extrabold text-[#25170d]">
+                    Fragrance & Tradition
+                  </p>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ---------------- Intro / Blog article ---------------- */}
-      <section id="story" className="mx-auto max-w-3xl px-6 py-16">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">
-          From the QubanHC Journal
-        </p>
-        <h2
-          className="mt-3 text-[26px] font-bold leading-snug tracking-tight text-[#0b1220] md:text-[30px]"
-          style={{ fontFamily: "'Sora', sans-serif" }}
-        >
-          Why "comfort" is the only feature that matters
-        </h2>
+      {/* =====================================================
+          STORY
+      ===================================================== */}
 
-        <div className="mt-6 space-y-4 text-[15px] leading-8 text-slate-600">
-          <p>
-            Hygiene products touch skin for hours at a time — a newborn's first
-            few weeks, a long work shift, an overnight sleep. At QubanHygiene, we
-            believe that kind of closeness deserves real care, not just a label
-            that says "soft."
+      <section id="story" className="mx-auto max-w-4xl px-5 py-20 sm:px-6">
+        <div className="text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-orange-600">
+            From the Anandavrinda Journal
           </p>
-          <p>
-            That's why every product in our range, from adult diapers to baby
-            wipes, is built around three things: the right size for every body,
-            a breathable fit that lasts through the day, and materials gentle
-            enough for the most sensitive skin. Comfort isn't an add-on for us —
-            it's the entire brief.
-          </p>
-        </div>
-      </section>
 
-      {/* ---------------- Values ---------------- */}
-      <section id="values" className="border-y border-slate-100 bg-slate-50/60">
-        <div className="mx-auto max-w-6xl px-6 py-16">
-          <div className="grid gap-6 md:grid-cols-3">
-            {VALUES.map((v) => (
-              <div
-                key={v.title}
-                className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/60"
-              >
-                <div className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:bg-emerald-100">
-                  <v.icon size={20} />
-                </div>
-                <h3
-                  className="mt-4 text-[16px] font-bold text-[#0b1220]"
-                  style={{ fontFamily: "'Sora', sans-serif" }}
-                >
-                  {v.title}
-                </h3>
-                <p className="mt-2 text-[13.5px] leading-6 text-slate-500">
-                  {v.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- Products ---------------- */}
-      <section id="products" className="mx-auto max-w-6xl px-6 py-20">
-        <div className="max-w-xl">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">
-            Our Range
-          </p>
           <h2
-            className="mt-3 text-[28px] font-extrabold tracking-tight text-[#0b1220] md:text-[34px]"
-            style={{ fontFamily: "'Sora', sans-serif" }}
+            className="mt-4 text-[30px] font-extrabold leading-tight tracking-tight text-[#25170d] sm:text-[38px]"
+            style={{
+              fontFamily: "'Playfair Display', serif",
+            }}
           >
-            Four products. One standard of comfort.
+            More than fragrance,
+            <span className="text-orange-700"> it's a feeling.</span>
           </h2>
-          <p className="mt-3 text-[14.5px] leading-7 text-slate-500">
-            Every size, every stage — made with the same care.
+
+          <div className="mx-auto mt-7 max-w-3xl space-y-5 text-[15px] leading-8 text-stone-600">
+            <p>
+              Fragrance has always been an important part of Indian homes,
+              traditions and celebrations. From the first stick of agarbatti in
+              the morning to the fragrance of dhoop during पूजा, these simple
+              rituals create moments of peace and connection.
+            </p>
+
+            <p>
+              At Anandavrinda, we bring together traditional fragrance
+              essentials and festive products that fit naturally into modern
+              life. Our collection includes agarbatti, dhoop, fragrances, Havan
+              essentials, Chandan Tika and thoughtful gifting options.
+            </p>
+
+            <p>
+              Whether you are preparing your home for a festival, creating a
+              peaceful पूजा space or looking for a meaningful gift, we believe
+              every product should add something beautiful to the moment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          VALUES
+      ===================================================== */}
+
+      <section className="border-y border-orange-100 bg-[#fff9ef]">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
+          <div className="mb-10 text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-600">
+              What we believe
+            </p>
+
+            <h2
+              className="mt-3 text-3xl font-extrabold text-[#25170d] sm:text-4xl"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+              }}
+            >
+              Rooted in tradition. Made for today.
+            </h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {VALUES.map((value) => (
+              <div
+                key={value.title}
+                className="group rounded-3xl border border-orange-100 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-orange-50 text-orange-700 transition group-hover:bg-orange-100">
+                  <value.icon size={21} />
+                </div>
+
+                <h3
+                  className="mt-5 text-lg font-bold text-[#25170d]"
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                  }}
+                >
+                  {value.title}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-stone-500">
+                  {value.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          COLLECTIONS
+      ===================================================== */}
+
+      <section
+        id="collections"
+        className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-600">
+            Our Collections
+          </p>
+
+          <h2
+            className="mt-3 text-3xl font-extrabold tracking-tight text-[#25170d] sm:text-4xl"
+            style={{
+              fontFamily: "'Playfair Display', serif",
+            }}
+          >
+            Fragrance, rituals & celebrations.
+          </h2>
+
+          <p className="mt-4 text-sm leading-7 text-stone-500 sm:text-base">
+            Explore our carefully selected range of products created for
+            everyday fragrance, traditional rituals, festive occasions and
+            meaningful gifting.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
-          {PRODUCTS.map((p) => (
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {CATEGORIES.map((item) => (
             <article
-              key={p.id}
-              className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60"
+              key={item.id}
+              className="group overflow-hidden rounded-[28px] border border-orange-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
             >
-              {/* Visual header block */}
-              <div
-                className="relative flex h-36 items-center justify-center overflow-hidden"
-                style={{ backgroundColor: p.accentSoft }}
-              >
-                <div
-                  className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-40 transition group-hover:opacity-60"
-                  style={{ backgroundColor: p.accent }}
-                />
-                <div
-                  className="relative grid h-16 w-16 place-items-center rounded-2xl text-white shadow-lg transition group-hover:scale-105"
-                  style={{ backgroundColor: p.accent }}
-                >
-                  <p.icon size={28} />
-                </div>
+              {/* Image */}
 
-                <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-500 shadow-sm">
-                  {p.tag}
+              <div className="relative aspect-[4/3] overflow-hidden bg-orange-50">
+                <ProductImage
+                  src={item.image}
+                  fallback={item.fallbackImage}
+                  alt={item.title}
+                  className="transition duration-700 group-hover:scale-110"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-70" />
+
+                <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-orange-700 shadow-sm">
+                  {item.tag}
                 </span>
+
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                  <h3
+                    className="text-xl font-bold text-white"
+                    style={{
+                      fontFamily: "'Playfair Display', serif",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-white text-orange-700 shadow-lg">
+                    <item.icon size={18} />
+                  </div>
+                </div>
               </div>
 
-              <div className="p-7">
-                <h3
-                  className="text-[19px] font-bold tracking-tight text-[#0b1220]"
-                  style={{ fontFamily: "'Sora', sans-serif" }}
-                >
-                  {p.title}
-                </h3>
+              {/* Content */}
 
-                <p className="mt-1 text-[12px] font-semibold uppercase tracking-wider text-slate-400">
-                  {p.sizes}
+              <div className="p-6">
+                <p className="text-sm leading-6 text-stone-500">
+                  {item.description}
                 </p>
 
-                <p className="mt-4 text-[13.5px] leading-6 text-slate-500">
-                  {p.description}
-                </p>
-
-                <ul className="mt-5 space-y-2">
-                  {p.points.map((pt) => (
-                    <li key={pt} className="flex items-center gap-2 text-[13px] text-slate-600">
-                      <CheckCircle2 size={15} style={{ color: p.accent }} />
-                      {pt}
+                <ul className="mt-5 space-y-2.5">
+                  {item.points.map((point) => (
+                    <li
+                      key={point}
+                      className="flex items-center gap-2 text-[13px] font-medium text-stone-600"
+                    >
+                      <CheckCircle2
+                        size={15}
+                        className="shrink-0 text-orange-600"
+                      />
+                      {point}
                     </li>
                   ))}
                 </ul>
 
                 <button
                   type="button"
-                  className="mt-6 inline-flex items-center gap-1.5 text-[13px] font-bold text-[#0b1220] transition group-hover:gap-2.5"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#25170d] transition-all group-hover:gap-3"
                 >
-                  Learn more
-                  <ArrowRight size={15} />
+                  Explore collection
+                  <ArrowRight size={16} />
                 </button>
               </div>
             </article>
@@ -346,29 +576,263 @@ export default function QubanHCBlogPage() {
         </div>
       </section>
 
-      {/* ---------------- CTA ---------------- */}
-      <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b1220] to-[#123024] px-8 py-14 text-center md:py-16">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-emerald-500/20 blur-3xl" />
-          <div className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
+      {/* =====================================================
+          FESTIVE SECTION
+      ===================================================== */}
 
-          <h2
-            className="relative text-[26px] font-extrabold tracking-tight text-white md:text-[32px]"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
-            Comfort that grows with your family.
-          </h2>
-          <p className="relative mx-auto mt-3 max-w-md text-[14px] leading-6 text-slate-300">
-            From your baby's first diaper to everyday essentials for the whole
-            family — QubanHC is with you at every size.
-          </p>
+      <section className="bg-[#25170d]">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-300">
+                Celebrate beautifully
+              </p>
+
+              <h2
+                className="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-4xl"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                }}
+              >
+                Festivals are made of
+                <span className="text-orange-300"> little traditions.</span>
+              </h2>
+
+              <p className="mt-5 max-w-lg text-sm leading-7 text-stone-300">
+                From Rakhi and festive gifting to puja essentials, discover
+                products that help you celebrate India's beautiful traditions
+                with family, friends and loved ones.
+              </p>
+
+              <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-orange-200">
+                <Sparkles size={14} />
+                Made for special occasions
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-3">
+              {FESTIVE_ITEMS.map((item) => (
+                <div
+                  key={item.title}
+                  className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5"
+                >
+                  <div className="aspect-square overflow-hidden bg-orange-100">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                    />
+                  </div>
+
+                  <div className="p-5">
+                    <div className="grid h-9 w-9 place-items-center rounded-xl bg-orange-500/15 text-orange-300">
+                      <item.icon size={17} />
+                    </div>
+
+                    <h3 className="mt-4 text-sm font-bold text-white">
+                      {item.title}
+                    </h3>
+
+                    <p className="mt-2 text-xs leading-5 text-stone-400">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ============================================================ */}
-      {/* FOOTER SLOT — plug your own footer component here             */}
-      {/* e.g. <YourFooter />                                           */}
-      {/* ============================================================ */}
+      {/* =====================================================
+          JOURNAL / ARTICLES
+      ===================================================== */}
+
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-600">
+              Anandavrinda Journal
+            </p>
+
+            <h2
+              className="mt-3 text-3xl font-extrabold text-[#25170d] sm:text-4xl"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+              }}
+            >
+              Stories, rituals & fragrance.
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm font-semibold text-stone-500">
+            <Clock size={16} />
+            Discover something new
+          </div>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <article className="group overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm">
+            <div className="aspect-[16/10] overflow-hidden">
+              <img
+                src="/images/agarbatti.jpg"
+                alt="Agarbatti"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                onError={(event) => {
+                  event.currentTarget.src =
+                    "/images/backflow-incense-cone-500x500-1-300x300.webp";
+                }}
+              />
+            </div>
+
+            <div className="p-6">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
+                Fragrance
+              </p>
+
+              <h3
+                className="mt-2 text-xl font-bold text-[#25170d]"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                }}
+              >
+                Why agarbatti is an essential part of Indian homes
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-stone-500">
+                Explore the timeless connection between fragrance, peace and
+                everyday rituals.
+              </p>
+
+              <button className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#25170d]">
+                Read article
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </article>
+
+          <article className="group overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm">
+            <div className="aspect-[16/10] overflow-hidden">
+              <img
+                src="/images/dhoop.jpg"
+                alt="Dhoop"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                onError={(event) => {
+                  event.currentTarget.src =
+                    "/images/incense-loban-dhoop-cone-1650616953-6302472-300x300.jpeg";
+                }}
+              />
+            </div>
+
+            <div className="p-6">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
+                Tradition
+              </p>
+
+              <h3
+                className="mt-2 text-xl font-bold text-[#25170d]"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                }}
+              >
+                Dhoop vs agarbatti: understanding the difference
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-stone-500">
+                A simple guide to choosing the right fragrance for your home and
+                rituals.
+              </p>
+
+              <button className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#25170d]">
+                Read article
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </article>
+
+          <article className="group overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm">
+            <div className="aspect-[16/10] overflow-hidden">
+              <img
+                src="/images/festive-gifting.jpg"
+                alt="Festive gifting"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                onError={(event) => {
+                  event.currentTarget.src = "/images/2147720593-300x300.jpg";
+                }}
+              />
+            </div>
+
+            <div className="p-6">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
+                Gifting
+              </p>
+
+              <h3
+                className="mt-2 text-xl font-bold text-[#25170d]"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                }}
+              >
+                Thoughtful gifting for every celebration
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-stone-500">
+                Ideas to make festivals, corporate events and special occasions
+                more memorable.
+              </p>
+
+              <button className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#25170d]">
+                Read article
+                <ArrowRight size={15} />
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* =====================================================
+          CTA
+      ===================================================== */}
+
+      <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#3a210f] via-[#5a2f12] to-[#21140b] px-7 py-14 text-center sm:px-10 md:py-16">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-orange-400/20 blur-3xl" />
+
+          <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-amber-300/10 blur-3xl" />
+
+          <div className="relative">
+            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-orange-400/15 text-orange-300">
+              <Sparkles size={22} />
+            </div>
+
+            <h2
+              className="mt-5 text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+              }}
+            >
+              Fragrance that makes every moment special.
+            </h2>
+
+            <p className="relative mx-auto mt-4 max-w-2xl text-sm leading-7 text-orange-100/70 sm:text-base">
+              Explore Anandavrinda's collection of agarbatti, dhoop, fragrances,
+              traditional essentials and festive gifting products.
+            </p>
+
+            <a
+              href="/"
+              className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#3a210f] transition hover:bg-orange-50"
+            >
+              Explore Our Collection
+              <ArrowRight size={16} />
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

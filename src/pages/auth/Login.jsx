@@ -1,26 +1,26 @@
-import { useMemo, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { authService } from '../../services/auth';
-import { useAuth } from '../../context/AuthContext';
+import { useMemo, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { authService } from "../../services/auth";
+import { useAuth } from "../../context/AuthContext";
 
 const validators = {
   email: (value) => {
     const email = value.trim().toLowerCase();
 
-    if (!email) return 'Email address is required.';
+    if (!email) return "Email address is required.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return 'Please enter a valid email address.';
+      return "Please enter a valid email address.";
     }
 
-    return '';
+    return "";
   },
 
   password: (value) => {
-    if (!value) return 'Password is required.';
-    if (value.length < 8) return 'Password must be at least 8 characters.';
-    return '';
+    if (!value) return "Password is required.";
+    if (value.length < 8) return "Password must be at least 8 characters.";
+    return "";
   },
 };
 
@@ -29,16 +29,16 @@ const Login = () => {
   const location = useLocation();
   const { login } = useAuth();
 
-  const from = location.state?.from || '/';
+  const from = location.state?.from || "/";
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +57,7 @@ const Login = () => {
       [name]: value,
     }));
 
-    setServerError('');
+    setServerError("");
 
     if (touched[name]) {
       setErrors((prev) => ({
@@ -101,24 +101,24 @@ const Login = () => {
       error.response?.data?.message ||
       error.response?.data?.error ||
       error.message ||
-      '';
+      "";
 
     const lower = message.toLowerCase();
 
     if (
-      lower.includes('invalid') ||
-      lower.includes('credentials') ||
-      lower.includes('password') ||
+      lower.includes("invalid") ||
+      lower.includes("credentials") ||
+      lower.includes("password") ||
       error.response?.status === 401
     ) {
-      return 'Invalid email or password.';
+      return "Invalid email or password.";
     }
 
     if (error.response?.status === 403) {
-      return message || 'You are not allowed to login from this portal.';
+      return message || "You are not allowed to login from this portal.";
     }
 
-    return message || 'Login failed. Please try again.';
+    return message || "Login failed. Please try again.";
   };
 
   const handleSubmit = async (e) => {
@@ -127,25 +127,25 @@ const Login = () => {
     if (!validateAll()) return;
 
     setLoading(true);
-    setServerError('');
+    setServerError("");
 
     try {
       const response = await authService.login({
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
-        allowedRoles: ['customer'],
+        allowedRoles: ["customer"],
       });
 
       const { user } = response.data;
 
-      if (!user || user.role !== 'customer') {
+      if (!user || user.role !== "customer") {
         authService.clearAuthData();
-        throw new Error('Please use admin login.');
+        throw new Error("Please use admin login.");
       }
 
       login(user);
       toast.success(`Welcome back, ${user.name}!`);
-      navigate(from || '/', { replace: true });
+      navigate(from || "/", { replace: true });
     } catch (error) {
       const message = getFriendlyError(error);
       setServerError(message);
@@ -158,31 +158,32 @@ const Login = () => {
   const inputClass = (field) =>
     `w-full pl-11 pr-4 py-3 border rounded-xl outline-none transition-all bg-white/90 ${
       errors[field] && touched[field]
-        ? 'border-red-300 focus:ring-2 focus:ring-red-400'
-        : 'border-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-transparent'
+        ? "border-red-300 focus:ring-2 focus:ring-red-400"
+        : "border-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
     }`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-gray-50 to-indigo-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center justify-center gap-3 mb-5">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center gap-3 mb-5"
+          >
             <div className="h-14 w-14 rounded-2xl bg-white shadow-md flex items-center justify-center">
               <img
-                src="/images/QubanHC.svg"
-                alt="QubanHC Logo"
+                src="/images/anandavrinda.jpeg"
+                alt="Anandavrinda Logo"
                 className="h-10 w-auto"
               />
             </div>
 
             <span className="text-3xl font-extrabold text-gray-800">
-              Quban<span className="text-teal-600">HC</span>
+              Anandavrinda
             </span>
           </Link>
 
-          <h2 className="text-3xl font-bold text-gray-900">
-            Welcome Back
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
 
           <p className="text-gray-500 mt-2">
             Sign in to continue shopping and manage your account.
@@ -214,15 +215,13 @@ const Login = () => {
                   onBlur={handleBlur}
                   required
                   autoComplete="email"
-                  className={inputClass('email')}
+                  className={inputClass("email")}
                   placeholder="you@example.com"
                 />
               </div>
 
               {errors.email && touched.email && (
-                <p className="mt-1.5 text-xs text-red-500">
-                  {errors.email}
-                </p>
+                <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>
               )}
             </div>
 
@@ -235,14 +234,14 @@ const Login = () => {
                 <Lock className="w-5 h-5 text-gray-400 absolute left-3.5 top-3.5" />
 
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   required
                   autoComplete="current-password"
-                  className={`${inputClass('password')} pr-12`}
+                  className={`${inputClass("password")} pr-12`}
                   placeholder="••••••••"
                 />
 
@@ -250,16 +249,14 @@ const Login = () => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3.5 top-3.5 text-gray-500 hover:text-gray-700"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
 
               {errors.password && touched.password && (
-                <p className="mt-1.5 text-xs text-red-500">
-                  {errors.password}
-                </p>
+                <p className="mt-1.5 text-xs text-red-500">{errors.password}</p>
               )}
             </div>
 
@@ -274,7 +271,7 @@ const Login = () => {
                   Signing in...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
@@ -286,7 +283,7 @@ const Login = () => {
           </div>
 
           <p className="text-center mt-6 text-sm text-gray-500">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <Link
               to="/register"
               state={{ from }}

@@ -93,7 +93,10 @@ export default function MegaMenu() {
         aria-expanded={open}
         onClick={handleToggleClick}
       >
-        Shop <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        Shop{" "}
+        <ChevronDown
+          className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {/* Mega menu panel – glassmorphism with enhanced UI */}
@@ -101,7 +104,9 @@ export default function MegaMenu() {
         onMouseEnter={handlePanelMouseEnter}
         onMouseLeave={handlePanelMouseLeave}
         className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[95vw] max-w-6xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-200/50 transition-all duration-300 z-50 ${
-          open ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-3'
+          open
+            ? "opacity-100 visible translate-y-0"
+            : "opacity-0 invisible -translate-y-3"
         }`}
         role="menu"
       >
@@ -119,7 +124,7 @@ export default function MegaMenu() {
                   {cat.items.map((item, i) => (
                     <li key={i}>
                       <Link
-                        to={`/category/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                        to={`/category/${item.toLowerCase().replace(/\s+/g, "-")}`}
                         className="block text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg px-3 py-1.5 transition-all duration-150"
                         onClick={closeMenuImmediately}
                       >
@@ -139,8 +144,10 @@ export default function MegaMenu() {
                 <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-3 backdrop-blur-sm">
                   <span className="text-4xl">🧻</span>
                 </div>
-                <h4 className="text-xl font-extrabold mb-1">Quban Wipes</h4>
-                <p className="text-xs text-white/80 mb-4">Super thick • Alcohol‑free • 99.9% germ kill</p>
+                <h4 className="text-xl font-extrabold mb-1">Anandavrinda</h4>
+                <p className="text-xs text-white/80 mb-4">
+                  Super thick • Alcohol‑free • 99.9% germ kill
+                </p>
                 <Link
                   to="/product/quban-wipes"
                   className="inline-block bg-white text-teal-700 px-5 py-2 rounded-full font-bold text-sm hover:shadow-md transition-all"
