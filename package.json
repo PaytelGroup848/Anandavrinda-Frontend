@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@cashfreepayments/cashfree-js": "^1.0.7",
     "@headlessui/react": "^2.2.10",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/vite": "^4.3.0",

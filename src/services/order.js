@@ -45,7 +45,7 @@ export const orderService = {
     },
 
     // ===========================
-    // PAYMENT (Cashfree Future)
+    // PAYMENT (Razorpay)
     // ===========================
 
     createPaymentSession: async (orderId) => {

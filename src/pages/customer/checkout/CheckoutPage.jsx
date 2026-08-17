@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { load } from '@cashfreepayments/cashfree-js';
 import {
   Mail,
   Phone,
@@ -20,7 +19,6 @@ import {
   BadgeCheck,
   Clock3,
   PackageCheck,
-  IndianRupee,
   ChevronRight,
   AlertCircle,
 } from 'lucide-react';
@@ -32,7 +30,7 @@ import { useCart } from '../../../context/CartContext';
 
 const PAYMENT_METHODS = [
   {
-    id: 'cashfree',
+    id: 'razorpay',
     title: 'Online Payment',
     description: 'Pay securely using UPI, cards, NetBanking and wallets.',
     badge: 'Recommended',
@@ -73,26 +71,32 @@ const extractOrder = (response) => {
   );
 };
 
-const extractCashfreeSessionId = (response) => {
+const extractRazorpayOrder = (response) => {
   const root = response?.data || response || {};
   const inner = root?.data || root;
 
   return (
-    inner?.cashfree?.paymentSessionId ||
-    inner?.data?.cashfree?.paymentSessionId ||
-    root?.cashfree?.paymentSessionId ||
-    root?.paymentSessionId ||
+    inner?.razorpay ||
+    inner?.data?.razorpay ||
+    root?.razorpay ||
     null
   );
 };
 
-const isMobileCheckoutDevice = () => {
-  if (typeof window === 'undefined') return false;
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
 
-  return (
-    /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent) ||
-    window.innerWidth < 768
-  );
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 };
 
 function getProductImage(item) {
@@ -119,7 +123,7 @@ export default function CheckoutPage() {
   const { cartItems = [] } = useCart() || {};
 
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('cashfree');
+  const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [focusedField, setFocusedField] = useState('');
 
   const [shippingAddress, setShippingAddress] = useState({
@@ -183,7 +187,7 @@ export default function CheckoutPage() {
     if (!city) return 'City is required.';
     if (!state) return 'State is required.';
     if (!/^\d{6}$/.test(pincode)) return 'Please enter a valid 6-digit pincode.';
-    if (!['cashfree', 'cod'].includes(paymentMethod)) return 'Please select a valid payment method.';
+    if (!['razorpay', 'cod'].includes(paymentMethod)) return 'Please select a valid payment method.';
 
     return '';
   };
@@ -200,7 +204,7 @@ export default function CheckoutPage() {
     landmark: cleanText(shippingAddress.landmark) || null,
   });
 
-  const startCashfreeCheckout = async (createdOrder) => {
+  const startRazorpayCheckout = async (createdOrder) => {
     const orderMongoId = createdOrder?._id;
     const humanOrderId = createdOrder?.orderId || orderMongoId;
 
@@ -208,28 +212,68 @@ export default function CheckoutPage() {
       throw new Error('Order ID not found after order creation.');
     }
 
-    const cashfreeOrderResponse = await paymentService.createCashfreeOrder(orderMongoId);
-    const paymentSessionId = extractCashfreeSessionId(cashfreeOrderResponse);
-
-    if (!paymentSessionId) {
-      console.error('Cashfree create order response:', cashfreeOrderResponse);
-      throw new Error('Cashfree payment session not found.');
+    const scriptLoaded = await loadRazorpayScript();
+    if (!scriptLoaded) {
+      throw new Error('Razorpay checkout failed to load. Please check your connection.');
     }
 
-    const cashfree = await load({
-      mode: import.meta.env.VITE_CASHFREE_ENV === 'production' ? 'production' : 'sandbox',
-    });
+    const razorpayOrderResponse = await paymentService.createRazorpayOrder(orderMongoId);
+    const razorpayData = extractRazorpayOrder(razorpayOrderResponse);
 
-    const mobileDevice = isMobileCheckoutDevice();
-
-    await cashfree.checkout({
-      paymentSessionId,
-      redirectTarget: mobileDevice ? '_self' : '_modal',
-    });
-
-    if (!mobileDevice) {
-      navigate(`/payment/cashfree/success?order_id=${humanOrderId}`, { replace: true });
+    if (!razorpayData || !razorpayData.orderId || !razorpayData.keyId) {
+      console.error('Razorpay create order response:', razorpayOrderResponse);
+      throw new Error('Razorpay order not created properly.');
     }
+
+    const amount = Number(createdOrder.total || 0);
+
+    const options = {
+      key: razorpayData.keyId,
+      amount: Math.round(amount * 100),
+      currency: 'INR',
+      name: 'Anandavrinda',
+      description: `Payment for order ${humanOrderId}`,
+      order_id: razorpayData.orderId,
+      prefill: {
+        name: shippingAddress.fullName || createdOrder.customerName || '',
+        email: shippingAddress.email || createdOrder.customerEmail || '',
+        contact: shippingAddress.phone || createdOrder.customerPhone || '',
+      },
+      notes: {
+        order_id: String(orderMongoId),
+        order_number: humanOrderId,
+      },
+      theme: {
+        color: '#0d9488',
+      },
+      handler: async function (response) {
+        try {
+          await paymentService.verifyRazorpayPayment(orderMongoId, {
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+          });
+
+          navigate(`/payment/razorpay/success?order_id=${humanOrderId}`, { replace: true });
+        } catch (verifyError) {
+          console.error('Razorpay verify after handler error:', verifyError);
+          toast.error('Payment verification failed. Please check your orders.');
+          navigate(`/payment/razorpay/success?order_id=${humanOrderId}`, { replace: true });
+        }
+      },
+      modal: {
+        ondismiss: function () {
+          toast.error('Payment cancelled by user.');
+        },
+      },
+    };
+
+    if (!window.Razorpay) {
+      throw new Error('Razorpay SDK not loaded');
+    }
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   const handleSubmit = async (event) => {
@@ -254,8 +298,8 @@ export default function CheckoutPage() {
         paymentMethod,
         email: cleanEmail,
         customerNote:
-          paymentMethod === 'cashfree'
-            ? 'Customer selected Cashfree online payment.'
+          paymentMethod === 'razorpay'
+            ? 'Customer selected Razorpay online payment.'
             : 'Customer selected Cash on Delivery.',
       };
 
@@ -267,8 +311,8 @@ export default function CheckoutPage() {
         throw new Error('Order created but order data not found.');
       }
 
-      if (paymentMethod === 'cashfree') {
-        await startCashfreeCheckout(createdOrder);
+      if (paymentMethod === 'razorpay') {
+        await startRazorpayCheckout(createdOrder);
         return;
       }
 
@@ -331,7 +375,7 @@ export default function CheckoutPage() {
               </h1>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
-                Add delivery details and pay safely. Mobile checkout uses redirect mode for a stable payment experience.
+                Add delivery details and pay safely. Online payment uses Razorpay Checkout.
               </p>
             </div>
 
@@ -537,7 +581,7 @@ export default function CheckoutPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="font-black text-slate-950">{method.title}</p>
-                          <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${method.id === 'cashfree' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                          <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ${method.id === 'razorpay' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
                             {method.badge}
                           </span>
                         </div>
@@ -557,7 +601,7 @@ export default function CheckoutPage() {
               <div className="flex gap-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                 <p className="text-sm leading-6 text-amber-800">
-                  Online payment opens in modal on desktop and redirects on mobile. Do not refresh while payment is processing.
+                  Online payment uses Razorpay secure checkout. Do not refresh while payment is processing.
                 </p>
               </div>
             </div>
@@ -575,7 +619,7 @@ export default function CheckoutPage() {
               ) : (
                 <>
                   <LockKeyhole className="h-5 w-5" />
-                  {paymentMethod === 'cashfree' ? 'Pay securely & place order' : 'Place COD order'}
+                  {paymentMethod === 'razorpay' ? 'Pay securely & place order' : 'Place COD order'}
                   <ChevronRight className="h-5 w-5" />
                 </>
               )}
@@ -670,9 +714,9 @@ export default function CheckoutPage() {
 
               <div className="mt-4 space-y-3 rounded-3xl bg-slate-50 p-4">
                 <InfoRow label="Selected payment" value={selectedPayment?.title || '-'} />
-                <InfoRow label="Gateway" value={paymentMethod === 'cashfree' ? 'Cashfree' : 'COD'} green={paymentMethod === 'cashfree'} />
-                <InfoRow label="Environment" value={import.meta.env.VITE_CASHFREE_ENV === 'production' ? 'Production' : 'Sandbox'} />
-                <InfoRow label="Order status" value={paymentMethod === 'cashfree' ? 'After payment verify' : 'Pending'} />
+                <InfoRow label="Gateway" value={paymentMethod === 'razorpay' ? 'Razorpay' : 'COD'} green={paymentMethod === 'razorpay'} />
+                <InfoRow label="Environment" value={import.meta.env.VITE_RAZORPAY_ENV === 'production' ? 'Production' : 'Test'} />
+                <InfoRow label="Order status" value={paymentMethod === 'razorpay' ? 'After payment verify' : 'Pending'} />
               </div>
 
               <div className="mt-4 grid gap-3">
@@ -697,7 +741,7 @@ export default function CheckoutPage() {
               <div className="flex items-start gap-3">
                 <Clock3 className="mt-0.5 h-5 w-5 text-emerald-700" />
                 <p className="text-sm leading-6 text-emerald-800">
-                  Test mode me real money deduct nahi hota. Production me live keys, HTTPS domain, return URL aur webhook required honge.
+                  Test mode me real money deduct nahi hota. Production me live keys, HTTPS domain, callback aur webhook required honge.
                 </p>
               </div>
             </div>

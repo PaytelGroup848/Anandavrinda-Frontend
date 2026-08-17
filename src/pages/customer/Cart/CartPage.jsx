@@ -793,7 +793,7 @@ export default function CartPage() {
                 {
                   icon: ShieldCheck,
                   label: "Secure Payment",
-                  sub: "Cashfree protected",
+                  sub: "Razorpay protected",
                   color: "bg-emerald-50 text-emerald-600",
                 },
                 {

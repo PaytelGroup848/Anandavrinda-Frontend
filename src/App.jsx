@@ -24,16 +24,11 @@ import CartPage from "./pages/customer/Cart/CartPage";
 import CheckoutPage from "./pages/customer/Checkout/CheckoutPage";
 import WishlistPage from "./pages/customer/WishlistPage/WishlistPage";
 import ContactUs from "./pages/customer/ContactUs";
-import CashfreeSuccess from "./pages/customer/payment/CashfreeSuccess";
-import MySupport from './pages/customer/Support/MySupport';
-import SupportTicketDetail from './pages/customer/Support/SupportTicketDetail';
+import RazorpaySuccess from "./pages/customer/payment/RazorpaySuccess";
+// import MySupport from "./pages/customer/Support/MySupport";
+// import SupportTicketDetail from "./pages/customer/Support/SupportTicketDetail";
 import QubanHCBlogPage from "./pages/customer/blogPage";
 
-// ✅ Invoice page
-// Agar tumhari file ka naam lowercase hai: src/components/invoice/invoice.jsx
-// to ye import sahi hai.
-// Agar file ka naam InvoicePage.jsx hai, then import change karna:
-// import InvoicePage from "./components/invoice/InvoicePage";
 import InvoicePage from "./components/invoice/invoice";
 
 // ---------- Admin imports lazy ----------
@@ -88,7 +83,8 @@ export default function App() {
                   <PublicRoute>
                     <QubanHCBlogPage />
                   </PublicRoute>
-                } />
+                }
+              />
 
               <Route
                 path="/register"
@@ -99,11 +95,13 @@ export default function App() {
                 }
               />
               <Route
-                path="/payment/cashfree/success"
+                path="/payment/razorpay/success"
                 element={
                   <PublicRoute>
-                    <CashfreeSuccess />
-                  </PublicRoute>} />
+                    <RazorpaySuccess />
+                  </PublicRoute>
+                }
+              />
 
               <Route
                 path="/admin/login"
@@ -133,27 +131,23 @@ export default function App() {
                 <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/contact" element={<ContactUs />} />
-
-                  // support routes
-                <Route
+                // support routes
+                {/* <Route
                   path="/account/support"
                   element={
-                    <ProtectedRoute allowedRoles={['customer']}>
+                    <ProtectedRoute allowedRoles={["customer"]}>
                       <MySupport />
                     </ProtectedRoute>
                   }
-                />
-
-                <Route
+                /> */}
+                {/* <Route
                   path="/account/support/:id"
                   element={
-                    <ProtectedRoute allowedRoles={['customer']}>
+                    <ProtectedRoute allowedRoles={["customer"]}>
                       <SupportTicketDetail />
                     </ProtectedRoute>
                   }
-                />
-
-
+                /> */}
                 {/* Protected customer pages */}
                 <Route
                   path="/wishlist"
@@ -163,7 +157,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-
                 <Route
                   path="/checkout"
                   element={
@@ -172,7 +165,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-
                 <Route
                   path="/account"
                   element={
@@ -181,7 +173,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-
                 {/* ✅ Customer Invoice Page */}
                 <Route
                   path="/account/orders/:id/invoice"

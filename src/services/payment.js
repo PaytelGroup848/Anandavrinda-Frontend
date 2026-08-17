@@ -1,17 +1,18 @@
 import api from './api';
 
 export const paymentService = {
-  createCashfreeOrder: async (orderId) => {
-    const response = await api.post('/payments/cashfree/create-order', {
+  createRazorpayOrder: async (orderId) => {
+    const response = await api.post('/payments/razorpay/create-order', {
       orderId,
     });
 
     return response.data;
   },
 
-  verifyCashfreePayment: async (orderId) => {
-    const response = await api.post('/payments/cashfree/verify', {
+  verifyRazorpayPayment: async (orderId, paymentData = {}) => {
+    const response = await api.post('/payments/razorpay/verify', {
       orderId,
+      ...paymentData,
     });
 
     return response.data;

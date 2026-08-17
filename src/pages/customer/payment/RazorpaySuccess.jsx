@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   CheckCircle2,
   FileText,
@@ -8,10 +8,10 @@ import {
   Package,
   ShieldCheck,
   XCircle,
-} from 'lucide-react';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import toast from "react-hot-toast";
 
-import paymentService from '../../../services/payment';
+import paymentService from "../../../services/payment";
 
 function extractOrder(response) {
   const root = response?.data || response || {};
@@ -26,10 +26,10 @@ function extractOrder(response) {
   );
 }
 
-export default function CashfreeSuccess() {
+export default function RazorpaySuccess() {
   const [searchParams] = useSearchParams();
 
-  const cashfreeOrderId = searchParams.get('order_id');
+  const razorpayOrderId = searchParams.get("order_id");
 
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState(null);
@@ -38,37 +38,40 @@ export default function CashfreeSuccess() {
   useEffect(() => {
     verifyPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cashfreeOrderId]);
+  }, [razorpayOrderId]);
 
   const verifyPayment = async () => {
     try {
-      if (!cashfreeOrderId) {
+      if (!razorpayOrderId) {
         setFailed(true);
-        toast.error('Order ID not found');
+        toast.error("Order ID not found");
         return;
       }
 
-      const response = await paymentService.verifyCashfreePayment(cashfreeOrderId);
+      const response =
+        await paymentService.verifyRazorpayPayment(razorpayOrderId);
       const verifiedOrder = extractOrder(response);
 
       if (!verifiedOrder) {
         setFailed(true);
-        toast.error('Order verification failed');
+        toast.error("Order verification failed");
         return;
       }
 
       setOrder(verifiedOrder);
 
-      if (verifiedOrder?.payment?.status === 'paid') {
-        toast.success('Payment verified successfully');
+      if (verifiedOrder?.payment?.status === "paid") {
+        toast.success("Payment verified successfully");
       } else {
         setFailed(true);
-        toast.error('Payment is not completed');
+        toast.error("Payment is not completed");
       }
     } catch (error) {
-      console.error('Payment success verify error:', error);
+      console.error("Payment success verify error:", error);
       setFailed(true);
-      toast.error(error?.response?.data?.message || 'Payment verification failed');
+      toast.error(
+        error?.response?.data?.message || "Payment verification failed",
+      );
     } finally {
       setLoading(false);
     }
@@ -84,7 +87,7 @@ export default function CashfreeSuccess() {
               Verifying Payment
             </h1>
             <p className="mt-2 text-sm text-gray-500">
-              Please wait, hum Cashfree se payment status verify kar rahe hain.
+              Please wait, we are Verifying the payment status through Razorpay.
             </p>
           </div>
         </div>
@@ -92,7 +95,7 @@ export default function CashfreeSuccess() {
     );
   }
 
-  if (failed || order?.payment?.status !== 'paid') {
+  if (failed || order?.payment?.status !== "paid") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50/30 to-orange-50/40 px-4 py-10">
         <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center">
@@ -104,11 +107,6 @@ export default function CashfreeSuccess() {
             <h1 className="mt-6 text-3xl font-black text-gray-950">
               Payment Not Completed
             </h1>
-
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-500">
-              Payment verify nahi ho payi. Agar amount deduct hua hai, thoda wait
-              karke My Orders me status check karo.
-            </p>
 
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
@@ -168,10 +166,6 @@ export default function CashfreeSuccess() {
                   <h2 className="font-black text-emerald-900">
                     Secure payment verified
                   </h2>
-                  <p className="mt-1 text-sm leading-6 text-emerald-800">
-                    Cashfree se payment verify ho chuki hai. Order paid mark ho
-                    gaya hai aur invoice generate ho sakti hai.
-                  </p>
                 </div>
               </div>
             </div>
