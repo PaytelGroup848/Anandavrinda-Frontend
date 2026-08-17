@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   AlertCircle,
   CheckCircle2,
@@ -12,49 +12,48 @@ import {
   Search,
   Send,
   X,
-} from 'lucide-react';
-import toast from 'react-hot-toast';
-
-import supportService from '../../../services/support';
+} from "lucide-react";
+import toast from "react-hot-toast";
+import supportService from "../../../../services/support";
 
 const CATEGORY_OPTIONS = [
-  { value: 'order', label: 'Order Issue' },
-  { value: 'payment', label: 'Payment Issue' },
-  { value: 'refund', label: 'Refund Issue' },
-  { value: 'delivery', label: 'Delivery Issue' },
-  { value: 'product', label: 'Product Issue' },
-  { value: 'account', label: 'Account Issue' },
-  { value: 'technical', label: 'Technical Issue' },
-  { value: 'other', label: 'Other' },
+  { value: "order", label: "Order Issue" },
+  { value: "payment", label: "Payment Issue" },
+  { value: "refund", label: "Refund Issue" },
+  { value: "delivery", label: "Delivery Issue" },
+  { value: "product", label: "Product Issue" },
+  { value: "account", label: "Account Issue" },
+  { value: "technical", label: "Technical Issue" },
+  { value: "other", label: "Other" },
 ];
 
 const PRIORITY_OPTIONS = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' },
-  { value: 'urgent', label: 'Urgent' },
+  { value: "low", label: "Low" },
+  { value: "medium", label: "Medium" },
+  { value: "high", label: "High" },
+  { value: "urgent", label: "Urgent" },
 ];
 
 const STATUS_OPTIONS = [
-  { value: '', label: 'All Status' },
-  { value: 'open', label: 'Open' },
-  { value: 'in_progress', label: 'In Progress' },
-  { value: 'resolved', label: 'Resolved' },
-  { value: 'closed', label: 'Closed' },
+  { value: "", label: "All Status" },
+  { value: "open", label: "Open" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "resolved", label: "Resolved" },
+  { value: "closed", label: "Closed" },
 ];
 
 const statusStyle = {
-  open: 'bg-blue-50 text-blue-700 ring-blue-200',
-  in_progress: 'bg-yellow-50 text-yellow-700 ring-yellow-200',
-  resolved: 'bg-green-50 text-green-700 ring-green-200',
-  closed: 'bg-gray-50 text-gray-700 ring-gray-200',
+  open: "bg-blue-50 text-blue-700 ring-blue-200",
+  in_progress: "bg-yellow-50 text-yellow-700 ring-yellow-200",
+  resolved: "bg-green-50 text-green-700 ring-green-200",
+  closed: "bg-gray-50 text-gray-700 ring-gray-200",
 };
 
 const priorityStyle = {
-  low: 'bg-gray-50 text-gray-700 ring-gray-200',
-  medium: 'bg-blue-50 text-blue-700 ring-blue-200',
-  high: 'bg-orange-50 text-orange-700 ring-orange-200',
-  urgent: 'bg-red-50 text-red-700 ring-red-200',
+  low: "bg-gray-50 text-gray-700 ring-gray-200",
+  medium: "bg-blue-50 text-blue-700 ring-blue-200",
+  high: "bg-orange-50 text-orange-700 ring-orange-200",
+  urgent: "bg-red-50 text-red-700 ring-red-200",
 };
 
 function extractPayload(response) {
@@ -65,20 +64,20 @@ function extractPayload(response) {
 }
 
 function formatDate(date) {
-  if (!date) return '-';
+  if (!date) return "-";
 
   const parsed = new Date(date);
 
   if (Number.isNaN(parsed.getTime())) {
-    return '-';
+    return "-";
   }
 
-  return parsed.toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return parsed.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -96,17 +95,17 @@ export default function MySupport() {
   const [showCreate, setShowCreate] = useState(false);
 
   const [filters, setFilters] = useState({
-    search: '',
-    status: '',
+    search: "",
+    status: "",
     page: 1,
     limit: 10,
   });
 
   const [form, setForm] = useState({
-    subject: '',
-    category: 'other',
-    priority: 'medium',
-    message: '',
+    subject: "",
+    category: "other",
+    priority: "medium",
+    message: "",
   });
 
   useEffect(() => {
@@ -116,11 +115,13 @@ export default function MySupport() {
 
   const filteredStats = useMemo(() => {
     const total = tickets.length;
-    const open = tickets.filter((ticket) => ticket.status === 'open').length;
+    const open = tickets.filter((ticket) => ticket.status === "open").length;
     const inProgress = tickets.filter(
-      (ticket) => ticket.status === 'in_progress'
+      (ticket) => ticket.status === "in_progress",
     ).length;
-    const resolved = tickets.filter((ticket) => ticket.status === 'resolved').length;
+    const resolved = tickets.filter(
+      (ticket) => ticket.status === "resolved",
+    ).length;
 
     return {
       total,
@@ -143,8 +144,8 @@ export default function MySupport() {
 
       setTickets(Array.isArray(payload?.tickets) ? payload.tickets : []);
     } catch (error) {
-      console.error('My support fetch error:', error);
-      toast.error(error?.response?.data?.message || 'Failed to fetch tickets');
+      console.error("My support fetch error:", error);
+      toast.error(error?.response?.data?.message || "Failed to fetch tickets");
     } finally {
       setLoading(false);
     }
@@ -156,22 +157,22 @@ export default function MySupport() {
 
   const validateForm = () => {
     if (form.subject.trim().length < 5) {
-      return 'Subject must be at least 5 characters.';
+      return "Subject must be at least 5 characters.";
     }
 
     if (form.message.trim().length < 5) {
-      return 'Message must be at least 5 characters.';
+      return "Message must be at least 5 characters.";
     }
 
     if (!CATEGORY_OPTIONS.some((item) => item.value === form.category)) {
-      return 'Please select a valid category.';
+      return "Please select a valid category.";
     }
 
     if (!PRIORITY_OPTIONS.some((item) => item.value === form.priority)) {
-      return 'Please select a valid priority.';
+      return "Please select a valid priority.";
     }
 
-    return '';
+    return "";
   };
 
   const createTicket = async (event) => {
@@ -204,18 +205,18 @@ export default function MySupport() {
       }
 
       setForm({
-        subject: '',
-        category: 'other',
-        priority: 'medium',
-        message: '',
+        subject: "",
+        category: "other",
+        priority: "medium",
+        message: "",
       });
 
       setShowCreate(false);
 
-      toast.success('Support ticket created successfully');
+      toast.success("Support ticket created successfully");
     } catch (error) {
-      console.error('Create ticket error:', error);
-      toast.error(error?.response?.data?.message || 'Failed to create ticket');
+      console.error("Create ticket error:", error);
+      toast.error(error?.response?.data?.message || "Failed to create ticket");
     } finally {
       setCreating(false);
     }
@@ -264,7 +265,11 @@ export default function MySupport() {
           <StatCard icon={MessageSquare} title="Total" value={stats.total} />
           <StatCard icon={AlertCircle} title="Open" value={stats.open} />
           <StatCard icon={Clock} title="In Progress" value={stats.inProgress} />
-          <StatCard icon={CheckCircle2} title="Resolved" value={stats.resolved} />
+          <StatCard
+            icon={CheckCircle2}
+            title="Resolved"
+            value={stats.resolved}
+          />
         </div>
 
         <div className="rounded-3xl border border-white bg-white p-5 shadow-xl shadow-teal-100/40">
@@ -281,7 +286,7 @@ export default function MySupport() {
                   }))
                 }
                 onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
+                  if (event.key === "Enter") {
                     handleSearch();
                   }
                 }}
@@ -361,18 +366,19 @@ export default function MySupport() {
                       </h3>
 
                       <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-                        {ticket.messages?.[ticket.messages.length - 1]?.message ||
-                          'No message'}
+                        {ticket.messages?.[ticket.messages.length - 1]
+                          ?.message || "No message"}
                       </p>
 
                       <p className="mt-3 text-xs font-semibold text-gray-400">
-                        Last update: {formatDate(ticket.lastMessageAt || ticket.updatedAt)}
+                        Last update:{" "}
+                        {formatDate(ticket.lastMessageAt || ticket.updatedAt)}
                       </p>
                     </div>
 
                     <div className="flex flex-wrap gap-2 md:justify-end">
                       <Badge className={statusStyle[ticket.status]}>
-                        {String(ticket.status || '').replace('_', ' ')}
+                        {String(ticket.status || "").replace("_", " ")}
                       </Badge>
 
                       <Badge className={priorityStyle[ticket.priority]}>

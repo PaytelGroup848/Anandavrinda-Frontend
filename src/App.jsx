@@ -25,11 +25,12 @@ import CheckoutPage from "./pages/customer/Checkout/CheckoutPage";
 import WishlistPage from "./pages/customer/WishlistPage/WishlistPage";
 import ContactUs from "./pages/customer/ContactUs";
 import RazorpaySuccess from "./pages/customer/payment/RazorpaySuccess";
-// import MySupport from "./pages/customer/Support/MySupport";
+
 // import SupportTicketDetail from "./pages/customer/Support/SupportTicketDetail";
 import QubanHCBlogPage from "./pages/customer/blogPage";
 
 import InvoicePage from "./components/invoice/invoice";
+import MySupport from "./pages/customer/Category/support/mySupport";
 
 // ---------- Admin imports lazy ----------
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -132,14 +133,14 @@ export default function App() {
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/contact" element={<ContactUs />} />
                 // support routes
-                {/* <Route
+                <Route
                   path="/account/support"
                   element={
                     <ProtectedRoute allowedRoles={["customer"]}>
                       <MySupport />
                     </ProtectedRoute>
                   }
-                /> */}
+                />
                 {/* <Route
                   path="/account/support/:id"
                   element={
