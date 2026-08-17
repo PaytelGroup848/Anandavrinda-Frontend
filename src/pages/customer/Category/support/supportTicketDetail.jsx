@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-import supportService from '../../../services/support';
+import supportService from '../../../../services/support';
 
 const statusStyle = {
   open: 'bg-blue-50 text-blue-700 ring-blue-200',

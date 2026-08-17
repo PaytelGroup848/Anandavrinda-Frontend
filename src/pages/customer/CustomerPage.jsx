@@ -11,6 +11,8 @@ import { useAuth } from "../../context/AuthContext";
 import ShopPopup from "../../components/Navbar/ShopPopup";
 import categoryService from "../../services/category";
 import Categories from "./Categories";
+import { Sparkles } from "lucide-react";
+import Media from "./Category/media";
 
 const FeaturedProducts = lazy(
   () => import("./FeaturedProucts/FeaturedProducts"),
@@ -148,19 +150,25 @@ const CustomerPage = memo(() => {
           variant="compact"
         />
 
-        <section className="relative bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16">
+        <img
+          src="/images/ChatGPT-Image-Jul-11-2026-05_29_50-PM-1024x546.png"
+          alt="Anandavrinda"
+          className="h-[500px] w-full"
+        />
+
+        <section className="relative bg-gradient-to-b from-[#fffaf2] to-white py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
               <div>
-                <span className="inline-flex rounded-full bg-teal-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-teal-700 ring-1 ring-teal-100">
-                  Best picks
-                </span>
-                <h2 className="mt-4 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
+                <h2 className="mt-4 text-3xl font-black tracking-tight text-[#008236] sm:text-4xl">
                   Featured Products
                 </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">
-                  Explore reliable healthcare products selected for comfort,
-                  quality and everyday care.
+
+                <p className="mt-1 max-w-3xl text-sm font-semibold text-orange-600 sm:text-base">
+                  Discover our handpicked collection of soulful fragrances,
+                  sacred essentials and traditional favourites — thoughtfully
+                  crafted to bring warmth, devotion and beautiful moments into
+                  your everyday life.
                 </p>
               </div>
             </div>
@@ -168,10 +176,11 @@ const CustomerPage = memo(() => {
             {hasError ? (
               <div className="rounded-[2rem] border border-red-100 bg-red-50 p-10 text-center">
                 <p className="font-black text-red-600">{error}</p>
+
                 <button
                   type="button"
                   onClick={() => window.location.reload()}
-                  className="mt-5 rounded-full bg-teal-600 px-5 py-3 text-sm font-black text-white hover:bg-teal-700"
+                  className="mt-5 rounded-full bg-[#7f1d1d] px-5 py-3 text-sm font-black text-white transition hover:bg-[#641515]"
                 >
                   Try Again
                 </button>
@@ -191,6 +200,7 @@ const CustomerPage = memo(() => {
           </div>
         </section>
         <Features />
+        <Media />
         {/* <NewsLetter /> */}
       </main>
     </div>

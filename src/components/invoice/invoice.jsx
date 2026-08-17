@@ -560,7 +560,7 @@ function InvoiceDesign({ invoice, order, settings }) {
   const company = {
     name: billing.companyName || billing.name || "Anandavrinda",
     address: companyAddress,
-    email: billing.email || support.email || "support@anandavrinda.com",
+    email: billing.email || support.email || "info@anandavrinda.com",
     phone: billing.phone || support.phone || "",
     gstin: billing.gstin || billing.gstNumber || tax.gstNumber || "",
     pan: billing.pan || "",

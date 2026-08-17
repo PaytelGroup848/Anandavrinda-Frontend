@@ -234,10 +234,10 @@ export default function ContactUs() {
                     <div>
                       <p className="text-sm font-medium text-gray-800">Email</p>
                       <a
-                        href="mailto:support@anandavrinda.com"
+                        href="mailto:info@anandavrinda.com"
                         className="text-sm text-gray-500 hover:text-teal-600"
                       >
-                        support@anandavrinda.com
+                        info@anandavrinda.com
                       </a>
                     </div>
                   </li>
@@ -248,7 +248,7 @@ export default function ContactUs() {
                         Working Hours
                       </p>
                       <p className="text-sm text-gray-500">
-                        Monday – Saturday: 9:00 AM – 7:00 PM
+                        Monday – Saturday: 9:00 AM – 6:00 PM
                         <br />
                         Sunday: Closed
                       </p>

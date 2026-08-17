@@ -226,7 +226,7 @@ export default function Categories({
     return (
       <section
         ref={sectionRef}
-        className="overflow-hidden bg-gradient-to-b from-white to-gray-50 py-14 sm:py-20"
+        className="relative overflow-hidden bg-[#fffaf0] py-14 sm:py-20"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-10 max-w-2xl text-center">
@@ -257,7 +257,7 @@ export default function Categories({
 
   if (variant === "compact") {
     return (
-      <section className="bg-white py-8 sm:py-10">
+      <section className="bg-gradient-to-b from-[#fff8e8] via-[#fffaf2] to-white py-8 sm:py-10">
         <div className="mx-auto max-w-[1400px] px-0 sm:px-4 lg:px-6">
           {/* Header */}
           <div className="mb-5 px-4 text-center sm:mb-7">
