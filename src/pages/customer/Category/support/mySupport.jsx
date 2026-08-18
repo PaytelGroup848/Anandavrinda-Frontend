@@ -223,28 +223,24 @@ export default function MySupport() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-teal-50/30 to-emerald-50/40 px-4 py-8">
-      <div className="mx-auto max-w-6xl space-y-6">
-        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+    <div className="min-h-screen bg-[#fffaf0] px-4 py-6">
+      <div className="mx-auto max-w-6xl space-y-5">
+        <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
           <div>
-            <p className="text-sm font-black uppercase tracking-wider text-teal-600">
-              Help Center
-            </p>
-
-            <h1 className="text-3xl font-black text-gray-950">
+            <h1 className="text-xl font-semibold text-gray-900">
               My Support Tickets
             </h1>
 
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-0.5 text-sm text-gray-500">
               Create and track your support requests.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={fetchTickets}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm font-black text-gray-700 hover:bg-gray-50"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               <RefreshCw className="h-4 w-4" />
               Refresh
@@ -253,7 +249,7 @@ export default function MySupport() {
             <button
               type="button"
               onClick={() => setShowCreate(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-3 text-sm font-black text-white hover:bg-teal-700"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
             >
               <Plus className="h-4 w-4" />
               New Ticket
@@ -261,7 +257,7 @@ export default function MySupport() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard icon={MessageSquare} title="Total" value={stats.total} />
           <StatCard icon={AlertCircle} title="Open" value={stats.open} />
           <StatCard icon={Clock} title="In Progress" value={stats.inProgress} />
@@ -272,10 +268,10 @@ export default function MySupport() {
           />
         </div>
 
-        <div className="rounded-3xl border border-white bg-white p-5 shadow-xl shadow-teal-100/40">
-          <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
+        <div className="rounded-md border border-gray-200 bg-white p-4">
+          <div className="grid gap-2 md:grid-cols-[1fr_auto_auto]">
             <div className="relative">
-              <Search className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
 
               <input
                 value={filters.search}
@@ -291,7 +287,7 @@ export default function MySupport() {
                   }
                 }}
                 placeholder="Search by subject or ticket id..."
-                className="w-full rounded-2xl border border-gray-200 bg-gray-50 py-3 pl-10 pr-4 text-sm font-semibold outline-none focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                className="w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
               />
             </div>
 
@@ -304,7 +300,7 @@ export default function MySupport() {
                   page: 1,
                 }))
               }
-              className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-bold outline-none"
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
             >
               {STATUS_OPTIONS.map((status) => (
                 <option key={status.value} value={status.value}>
@@ -316,22 +312,22 @@ export default function MySupport() {
             <button
               type="button"
               onClick={handleSearch}
-              className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-black text-white hover:bg-slate-800"
+              className="rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
             >
               Search
             </button>
           </div>
 
-          <div className="mt-5 space-y-3">
+          <div className="mt-4 space-y-2">
             {loading ? (
               <div className="flex h-48 items-center justify-center">
-                <Loader2 className="h-7 w-7 animate-spin text-gray-400" />
+                <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
               </div>
             ) : tickets.length === 0 ? (
-              <div className="rounded-3xl bg-gray-50 p-10 text-center">
-                <FileQuestion className="mx-auto h-12 w-12 text-gray-300" />
+              <div className="rounded-md border border-gray-200 bg-gray-50 p-8 text-center">
+                <FileQuestion className="mx-auto h-10 w-10 text-gray-300" />
 
-                <h2 className="mt-4 text-lg font-black text-gray-900">
+                <h2 className="mt-3 text-base font-semibold text-gray-900">
                   No support tickets yet
                 </h2>
 
@@ -342,7 +338,7 @@ export default function MySupport() {
                 <button
                   type="button"
                   onClick={() => setShowCreate(true)}
-                  className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-3 text-sm font-black text-white hover:bg-teal-700"
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
                 >
                   <Plus className="h-4 w-4" />
                   Create Ticket
@@ -353,30 +349,30 @@ export default function MySupport() {
                 <Link
                   key={ticket._id}
                   to={`/account/support/${ticket._id}`}
-                  className="block rounded-3xl border border-gray-100 bg-white p-5 transition hover:border-teal-300 hover:bg-teal-50/40"
+                  className="block rounded-md border border-gray-200 bg-white p-4 transition hover:border-teal-300 hover:bg-teal-50/40"
                 >
-                  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                  <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
                     <div>
-                      <p className="text-xs font-black uppercase tracking-wider text-gray-400">
+                      <p className="text-xs font-medium uppercase text-gray-400">
                         #{ticket.ticketId}
                       </p>
 
-                      <h3 className="mt-1 text-lg font-black text-gray-950">
+                      <h3 className="mt-0.5 text-sm font-semibold text-gray-900">
                         {ticket.subject}
                       </h3>
 
-                      <p className="mt-2 line-clamp-2 text-sm text-gray-500">
+                      <p className="mt-1.5 line-clamp-2 text-sm text-gray-500">
                         {ticket.messages?.[ticket.messages.length - 1]
                           ?.message || "No message"}
                       </p>
 
-                      <p className="mt-3 text-xs font-semibold text-gray-400">
+                      <p className="mt-2 text-xs text-gray-400">
                         Last update:{" "}
                         {formatDate(ticket.lastMessageAt || ticket.updatedAt)}
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 md:justify-end">
+                    <div className="flex flex-wrap gap-1.5 md:justify-end">
                       <Badge className={statusStyle[ticket.status]}>
                         {String(ticket.status || "").replace("_", " ")}
                       </Badge>
@@ -399,10 +395,10 @@ export default function MySupport() {
 
       {showCreate && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl">
-            <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="w-full max-w-2xl rounded-md bg-white p-5">
+            <div className="mb-4 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-black text-gray-950">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Create Support Ticket
                 </h2>
 
@@ -414,7 +410,7 @@ export default function MySupport() {
               <button
                 type="button"
                 onClick={() => setShowCreate(false)}
-                className="rounded-xl p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -422,7 +418,7 @@ export default function MySupport() {
 
             <form onSubmit={createTicket} className="space-y-4">
               <div>
-                <label className="text-sm font-black text-gray-700">
+                <label className="text-xs font-medium text-gray-600">
                   Subject
                 </label>
 
@@ -435,13 +431,13 @@ export default function MySupport() {
                     }))
                   }
                   placeholder="Example: Payment successful but order not confirmed"
-                  className="mt-1.5 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold outline-none focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-sm font-black text-gray-700">
+                  <label className="text-xs font-medium text-gray-600">
                     Category
                   </label>
 
@@ -453,7 +449,7 @@ export default function MySupport() {
                         category: event.target.value,
                       }))
                     }
-                    className="mt-1.5 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-bold outline-none focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                   >
                     {CATEGORY_OPTIONS.map((category) => (
                       <option key={category.value} value={category.value}>
@@ -464,7 +460,7 @@ export default function MySupport() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-black text-gray-700">
+                  <label className="text-xs font-medium text-gray-600">
                     Priority
                   </label>
 
@@ -476,7 +472,7 @@ export default function MySupport() {
                         priority: event.target.value,
                       }))
                     }
-                    className="mt-1.5 w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-bold outline-none focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                    className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                   >
                     {PRIORITY_OPTIONS.map((priority) => (
                       <option key={priority.value} value={priority.value}>
@@ -488,7 +484,7 @@ export default function MySupport() {
               </div>
 
               <div>
-                <label className="text-sm font-black text-gray-700">
+                <label className="text-xs font-medium text-gray-600">
                   Message
                 </label>
 
@@ -502,14 +498,14 @@ export default function MySupport() {
                   }
                   rows={5}
                   placeholder="Describe your issue clearly..."
-                  className="mt-1.5 w-full resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-semibold outline-none focus:border-teal-400 focus:bg-white focus:ring-4 focus:ring-teal-100"
+                  className="mt-1 w-full resize-none rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={creating}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-4 text-sm font-black text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-3 text-sm font-medium text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {creating ? (
                   <>
@@ -533,13 +529,13 @@ export default function MySupport() {
 
 function StatCard({ icon: Icon, title, value }) {
   return (
-    <div className="rounded-3xl border border-white bg-white p-5 shadow-xl shadow-teal-100/40">
-      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50">
-        <Icon className="h-5 w-5 text-teal-600" />
+    <div className="rounded-md border border-gray-200 bg-white p-4">
+      <div className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-50">
+        <Icon className="h-4 w-4 text-teal-600" />
       </div>
 
-      <p className="mt-4 text-sm font-bold text-gray-500">{title}</p>
-      <p className="mt-1 text-2xl font-black text-gray-950">{value}</p>
+      <p className="mt-3 text-xs font-medium text-gray-500">{title}</p>
+      <p className="mt-0.5 text-xl font-semibold text-gray-900">{value}</p>
     </div>
   );
 }
@@ -547,7 +543,7 @@ function StatCard({ icon: Icon, title, value }) {
 function Badge({ children, className }) {
   return (
     <span
-      className={`inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase ring-1 ${className}`}
+      className={`inline-flex rounded px-2 py-0.5 text-[10px] font-medium uppercase ring-1 ${className}`}
     >
       {children}
     </span>
