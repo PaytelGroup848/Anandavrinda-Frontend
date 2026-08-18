@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Mail, Phone, MapPin, Clock, Send, Loader2 } from "lucide-react";
+import contactService from "../../services/contact";
 
 export default function ContactUs() {
   const [form, setForm] = useState({
@@ -36,9 +37,14 @@ export default function ContactUs() {
     }
 
     setLoading(true);
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await contactService.submitQuery({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        subject: form.subject,
+        message: form.message.trim(),
+      });
       toast.success("Message sent successfully!");
       setSubmitted(true);
       setForm({
@@ -49,7 +55,10 @@ export default function ContactUs() {
         message: "",
       });
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error(
+        err?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }

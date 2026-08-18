@@ -24,6 +24,11 @@ export const ADMIN_MODULES = [
     label: 'Support',
     path: '/admin/support',
   },
+  {
+    id: 'get_in_touch',
+    label: 'Get in Touch',
+    path: '/admin/get-in-touch',
+  },
 ];
 
 export const ADMIN_MODULE_ORDER = [
@@ -32,6 +37,7 @@ export const ADMIN_MODULE_ORDER = [
   'orders',
   'customers',
   'support',
+  'get_in_touch',
 ];
 
 export const getUserPermissions = (user) => {

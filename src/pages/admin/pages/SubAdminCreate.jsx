@@ -9,6 +9,7 @@ const allModules = [
   { id: 'orders', label: 'Orders' },
   { id: 'customers', label: 'Customers' },
   { id: 'support', label: 'Support' },
+  { id: 'get_in_touch', label: 'Get in Touch' },
 ];
 
 const allowedPermissionIds = allModules.map((module) => module.id);

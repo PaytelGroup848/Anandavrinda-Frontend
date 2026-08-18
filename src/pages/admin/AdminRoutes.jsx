@@ -15,6 +15,7 @@ import SettingsPage from './pages/settings/SettingsPage';
 import InvoicePage from '../../components/invoice/invoice';
 import OrderDetails from './pages/orderDetails';
 import Support from './pages/support';
+import GetInTouch from './pages/getInTouch';
 
 const AdminLogin = lazy(() => import('./AdminLogin'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
@@ -217,6 +218,15 @@ export default function AdminRoutes() {
             element={
               <ModuleGuard moduleId="support">
                 <Support />
+              </ModuleGuard>
+            }
+          />
+
+          <Route
+            path="get-in-touch"
+            element={
+              <ModuleGuard moduleId="get_in_touch">
+                <GetInTouch />
               </ModuleGuard>
             }
           />

@@ -24,6 +24,11 @@ export const ADMIN_MODULES = [
     label: 'Support',
     path: '/admin/support',
   },
+  {
+    id: 'get_in_touch',
+    label: 'Get in Touch',
+    path: '/admin/get-in-touch',
+  },
 ];
 
 export const SUPER_ADMIN_MENUS = [
@@ -71,6 +76,11 @@ export const SUPER_ADMIN_MENUS = [
     id: 'support',
     label: 'Support',
     path: '/admin/support',
+  },
+  {
+    id: 'get_in_touch',
+    label: 'Get in Touch',
+    path: '/admin/get-in-touch',
   },
   {
     id: 'settings',
@@ -147,6 +157,7 @@ export const getModuleByPath = (pathname = '') => {
   if (pathname.startsWith('/admin/orders')) return 'orders';
   if (pathname.startsWith('/admin/customers')) return 'customers';
   if (pathname.startsWith('/admin/support')) return 'support';
+  if (pathname.startsWith('/admin/get-in-touch')) return 'get_in_touch';
 
   return null;
 };

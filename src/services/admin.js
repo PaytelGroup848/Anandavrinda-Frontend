@@ -356,5 +356,36 @@ deleteSupportTicket: async (id) => {
   return response.data;
 },
 
+// ==================== GET IN TOUCH / CONTACT ====================
+getContactStats: async () => {
+  const response = await api.get('/contact/admin/stats');
+  return response.data;
+},
+
+getContactQueries: async (params = {}) => {
+  const queryParams = new URLSearchParams(params).toString();
+
+  const response = await api.get(
+    `/contact${queryParams ? `?${queryParams}` : ''}`
+  );
+
+  return response.data;
+},
+
+getContactQueryById: async (id) => {
+  const response = await api.get(`/contact/${id}`);
+  return response.data;
+},
+
+updateContactQuery: async (id, data) => {
+  const response = await api.patch(`/contact/${id}`, data);
+  return response.data;
+},
+
+deleteContactQuery: async (id) => {
+  const response = await api.delete(`/contact/${id}`);
+  return response.data;
+},
+
 };
 export default adminService;
