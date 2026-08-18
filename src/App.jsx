@@ -26,11 +26,11 @@ import WishlistPage from "./pages/customer/WishlistPage/WishlistPage";
 import ContactUs from "./pages/customer/ContactUs";
 import RazorpaySuccess from "./pages/customer/payment/RazorpaySuccess";
 
-// import SupportTicketDetail from "./pages/customer/Support/SupportTicketDetail";
 import QubanHCBlogPage from "./pages/customer/blogPage";
 
 import InvoicePage from "./components/invoice/invoice";
 import MySupport from "./pages/customer/Category/support/mySupport";
+import SupportTicketDetail from "./pages/customer/Category/support/supportTicketDetail";
 
 // ---------- Admin imports lazy ----------
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -132,7 +132,6 @@ export default function App() {
                 <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/contact" element={<ContactUs />} />
-                // support routes
                 <Route
                   path="/account/support"
                   element={
@@ -141,14 +140,14 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-                {/* <Route
+                <Route
                   path="/account/support/:id"
                   element={
                     <ProtectedRoute allowedRoles={["customer"]}>
                       <SupportTicketDetail />
                     </ProtectedRoute>
                   }
-                /> */}
+                />
                 {/* Protected customer pages */}
                 <Route
                   path="/wishlist"

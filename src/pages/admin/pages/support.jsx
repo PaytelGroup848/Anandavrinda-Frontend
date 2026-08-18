@@ -77,7 +77,12 @@ export default function Support() {
   const [reply, setReply] = useState('');
   const [internalNote, setInternalNote] = useState(false);
 
- const fetchAll = async () => {
+  useEffect(() => {
+    fetchAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchAll = async () => {
   try {
     setLoading(true);
 
