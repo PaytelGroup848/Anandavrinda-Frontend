@@ -1,11 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
-import { wishlistService } from '../../services/wishlist';
+import { useState, useEffect, useCallback } from "react";
+import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
+import { wishlistService } from "../../services/wishlist";
 
 const mockSuggestions = [
-  'Adult Diaper Extra Large', 'Baby Wipes Sensitive', 'Kids Scooter Blue',
-  'Underpad 60x90', 'Hand Sanitiser', 'Baby Diapers Newborn'
+  "Havan Cups",
+  "Dhoop Cones & Sticks",
+  "Chandan Tika",
+  "Corporate Gifting",
+  "Backflow Cones",
 ];
 
 export function useDebounce(value, delay = 300) {
@@ -18,45 +21,44 @@ export function useDebounce(value, delay = 300) {
 }
 
 export default function useNavbar() {
-  const { cartCount }               = useCart();
-  const { isLoggedIn, user, role }  = useAuth(); // ← AuthContext se lo
+  const { cartCount } = useCart();
+  const { isLoggedIn, user, role } = useAuth(); // ← AuthContext se lo
 
   const [wishlistCount, setWishlistCount] = useState(0);
-  const [searchQuery, setSearchQuery]     = useState('');
-  const debouncedSearch                   = useDebounce(searchQuery, 300);
-  const [suggestions, setSuggestions]     = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 300);
+  const [suggestions, setSuggestions] = useState([]);
   const [searchFocused, setSearchFocused] = useState(false);
 
-useEffect(() => {
-  const loadWishlistCount = async () => {
-    if (!isLoggedIn) {
-      setWishlistCount(0);
-      return;
-    }
+  useEffect(() => {
+    const loadWishlistCount = async () => {
+      if (!isLoggedIn) {
+        setWishlistCount(0);
+        return;
+      }
 
-    try {
-      const response = await wishlistService.getWishlist();
-      setWishlistCount(response.data?.wishlist?.items?.length || 0);
-    } catch {
-      setWishlistCount(0);
-    }
-  };
+      try {
+        const response = await wishlistService.getWishlist();
+        setWishlistCount(response.data?.wishlist?.items?.length || 0);
+      } catch {
+        setWishlistCount(0);
+      }
+    };
 
-  loadWishlistCount();
+    loadWishlistCount();
 
-  const handleWishlistChanged = () => loadWishlistCount();
-  window.addEventListener('wishlist-changed', handleWishlistChanged);
+    const handleWishlistChanged = () => loadWishlistCount();
+    window.addEventListener("wishlist-changed", handleWishlistChanged);
 
-  return () => {
-    window.removeEventListener('wishlist-changed', handleWishlistChanged);
-  };
-}, [isLoggedIn]);
-
+    return () => {
+      window.removeEventListener("wishlist-changed", handleWishlistChanged);
+    };
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (debouncedSearch.trim()) {
-      const filtered = mockSuggestions.filter(item =>
-        item.toLowerCase().includes(debouncedSearch.toLowerCase())
+      const filtered = mockSuggestions.filter((item) =>
+        item.toLowerCase().includes(debouncedSearch.toLowerCase()),
       );
       setSuggestions(filtered);
     } else {
