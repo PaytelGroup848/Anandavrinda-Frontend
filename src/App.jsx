@@ -24,6 +24,7 @@ import CartPage from "./pages/customer/Cart/CartPage";
 import CheckoutPage from "./pages/customer/Checkout/CheckoutPage";
 import WishlistPage from "./pages/customer/WishlistPage/WishlistPage";
 import ContactUs from "./pages/customer/ContactUs";
+import SearchPage from "./pages/customer/Search/SearchPage";
 import RazorpaySuccess from "./pages/customer/payment/RazorpaySuccess";
 
 import QubanHCBlogPage from "./pages/customer/blogPage";
@@ -132,6 +133,7 @@ export default function App() {
                 <Route path="/products/:id" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/contact" element={<ContactUs />} />
+                <Route path="/search" element={<SearchPage />} />
                 <Route
                   path="/account/support"
                   element={
