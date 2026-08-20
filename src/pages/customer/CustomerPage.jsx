@@ -14,6 +14,7 @@ import Categories from "./Categories";
 import { Sparkles } from "lucide-react";
 import Media from "./Category/media";
 import Pagination, { extractPagination } from "../../components/Pagination";
+import PromotionalBanner from "./PromotionalBanner";
 
 const FeaturedProducts = lazy(
   () => import("./FeaturedProucts/FeaturedProducts"),
@@ -41,6 +42,7 @@ const CustomerPage = memo(() => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  // Fetch products
   useEffect(() => {
     let mounted = true;
 
@@ -169,11 +171,7 @@ const CustomerPage = memo(() => {
           variant="compact"
         />
 
-        <img
-          src="/images/ChatGPT-Image-Jul-11-2026-05_29_50-PM-1024x546.png"
-          alt="Anandavrinda"
-          className="h-[500px] w-full"
-        />
+        <PromotionalBanner />
 
         <section className="relative bg-gradient-to-b from-[#fffaf2] to-white py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -231,7 +229,6 @@ const CustomerPage = memo(() => {
         </section>
         <Features />
         <Media />
-        {/* <NewsLetter /> */}
       </main>
     </div>
   );
