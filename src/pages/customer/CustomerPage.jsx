@@ -13,6 +13,7 @@ import categoryService from "../../services/category";
 import Categories from "./Categories";
 import { Sparkles } from "lucide-react";
 import Media from "./Category/media";
+import Pagination, { extractPagination } from "../../components/Pagination";
 
 const FeaturedProducts = lazy(
   () => import("./FeaturedProucts/FeaturedProducts"),
@@ -28,6 +29,13 @@ const CustomerPage = memo(() => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 1,
+  });
 
   const { addToCart } = useCart();
   const { isLoggedIn } = useAuth();
@@ -41,12 +49,23 @@ const CustomerPage = memo(() => {
         setLoading(true);
         setError(null);
 
-        const response = await productService.getAllProducts({ limit: 12 });
+        const response = await productService.getAllProducts({
+          page,
+          limit: 20,
+        });
         const payload = response?.data || response || {};
         const nextProducts = payload?.products || payload?.data?.products || [];
 
-        if (mounted)
+        if (mounted) {
           setProducts(Array.isArray(nextProducts) ? nextProducts : []);
+          setPagination(
+            extractPagination(payload, {
+              page,
+              limit: 20,
+              total: Array.isArray(nextProducts) ? nextProducts.length : 0,
+            }),
+          );
+        }
       } catch (err) {
         console.error("Error fetching products:", err);
         if (mounted) setError("Failed to load products");
@@ -60,7 +79,7 @@ const CustomerPage = memo(() => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [page]);
 
   const requireLogin = useCallback(
     (from = "/") => {
@@ -197,6 +216,17 @@ const CustomerPage = memo(() => {
                 />
               </Suspense>
             )}
+
+            {!hasError && pagination.totalPages > 1 ? (
+              <Pagination
+                className="mt-8"
+                page={pagination.page}
+                totalPages={pagination.totalPages}
+                total={pagination.total}
+                limit={pagination.limit}
+                onPageChange={setPage}
+              />
+            ) : null}
           </div>
         </section>
         <Features />
