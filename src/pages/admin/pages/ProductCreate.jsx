@@ -634,8 +634,8 @@ export default function ProductCreate() {
                 Sizes & Quantity
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Enable this for products with multiple sizes (e.g. diapers,
-                pads, apparel with S/M/L/XL/XXL)
+                Enable this for products with multiple sizes (e.g. Candles,
+                apparel with S/M/L/XL/XXL)
               </p>
             </div>
             <label className="flex items-center gap-3 cursor-pointer">

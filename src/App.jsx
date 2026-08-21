@@ -27,11 +27,14 @@ import ContactUs from "./pages/customer/ContactUs";
 import SearchPage from "./pages/customer/Search/SearchPage";
 import RazorpaySuccess from "./pages/customer/payment/RazorpaySuccess";
 
-import QubanHCBlogPage from "./pages/customer/blogPage";
+// Remove this duplicate import - you already have BlogListing and BlogPage below
+// import QubanHCBlogPage from "./pages/customer/blogPage";
 
 import InvoicePage from "./components/invoice/invoice";
 import MySupport from "./pages/customer/Category/support/mySupport";
 import SupportTicketDetail from "./pages/customer/Category/support/supportTicketDetail";
+import BlogListing from "./pages/customer/BlogListing";
+import BlogPage from "./pages/customer/blogPage";
 
 // ---------- Admin imports lazy ----------
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -80,15 +83,6 @@ export default function App() {
                 }
               />
               <Route
-                path="/blog"
-                element={
-                  <PublicRoute>
-                    <QubanHCBlogPage />
-                  </PublicRoute>
-                }
-              />
-
-              <Route
                 path="/register"
                 element={
                   <PublicRoute>
@@ -134,6 +128,11 @@ export default function App() {
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/search" element={<SearchPage />} />
+
+                <Route path="/blog" element={<BlogListing />} />
+                <Route path="/blog/:slug" element={<BlogPage />} />
+
+                {/* Support routes */}
                 <Route
                   path="/account/support"
                   element={
@@ -150,6 +149,7 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
+
                 {/* Protected customer pages */}
                 <Route
                   path="/wishlist"
@@ -175,7 +175,7 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-                {/* ✅ Customer Invoice Page */}
+                {/* Customer Invoice Page */}
                 <Route
                   path="/account/orders/:id/invoice"
                   element={
