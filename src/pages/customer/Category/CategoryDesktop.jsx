@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronRight, Loader2, Sparkles } from "lucide-react";
 import { categoryService } from "../../../services/category";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || "https://store.anandavrinda.com";
+//  || "http://localhost:5000";
 
 const fallbackCategories = [
   {

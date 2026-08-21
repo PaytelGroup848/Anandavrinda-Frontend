@@ -25,9 +25,9 @@ import { useCart } from "../../../context/CartContext";
 import Pagination, { paginateItems } from "../../../components/Pagination";
 
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL ||
-  // "http://localhost:5000"
-  "https://qubanhygienecare.com";
+  import.meta.env.VITE_BACKEND_URL || "https://store.anandavrinda.com";
+// "http://localhost:5000"
+// "https://qubanhygienecare.com";
 
 function formatPrice(amount) {
   return new Intl.NumberFormat("en-IN", {
